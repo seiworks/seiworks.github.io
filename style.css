@@ -7,8 +7,7 @@ body {
 
 .firstView__container {
     background: linear-gradient(180deg, #c2bdb6, #f5f7fa);
-    height: 80vh;
-    color: white;
+    height: 90vh;
     padding: 50px 0;
     position: relative;
     display: flex;
@@ -44,17 +43,55 @@ body {
 
 .firstView__box {
     display: flex;
-    color: #333;
+    color: #2c2c2c;
     font-size: 28px;
     font-weight: 600;
     margin: 0 auto;
 }
 
-.firstView__box .site-name {
+.site-name {
     font-size: 46px;
     color: #3498db;
     text-shadow: -3px 3px 2px rgba(255, 255, 255, 0.5);
 
+}
+
+.site-slogan {
+    display: inline-block;
+    font-size: 20px;
+    color: #225d85;
+    font-weight: bold;
+    position: relative;
+    opacity: 0;
+    animation: fadeInShine 3s ease-in-out forwards;
+    animation-delay: 2s;
+    overflow: hidden;
+    text-shadow: -3px 3px 2px rgba(255, 255, 255, 0.5);
+}
+
+.site-slogan::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    transform: skewX(-20deg);
+    animation: shineEffect 3s ease-in-out forwards;
+    animation-delay: 2.2s;
+}
+
+@keyframes fadeInShine {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shineEffect {
+    to {
+        left: 125%;
+    }
 }
 
 .jump-emoji {
@@ -105,6 +142,37 @@ body {
     }
 }
 
+.scroll-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.scroll-indicator span {
+    font-size: 45px;
+    margin-top: -1.5rem;
+    animation: jumpArrow 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+
+@keyframes jumpArrow {
+    0% {
+        transform: translateY(0);
+    }
+
+    45% {
+        transform: translateY(3px);
+    }
+
+    75% {
+        transform: translateY(10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
 .tagline {
     background: #3498db;
     color: white;
@@ -114,11 +182,31 @@ body {
     font-size: 0.9rem;
 }
 
-footer {
+.header {
+    height: auto;
+    background-color: #225d85;
+}
+
+.navbar__bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 999;
+}
+
+.navbar .email {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#footer {
     margin-top: 50px;
     font-size: 0.8rem;
     text-align: center;
     color: #999;
     display: fixed;
     bottom: 0;
+    height: 100px;
 }
