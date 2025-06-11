@@ -1,8 +1,12 @@
+html,
+body {
+    overflow-x: hidden !important;
+}
+
 body {
     font-family: "Segoe UI", sans-serif;
     background: #f5f7fa;
     color: #2c2c2c;
-    overflow-x: hidden;
 }
 
 .br__sp {
@@ -17,7 +21,7 @@ body {
 
 .firstView__container {
     background: linear-gradient(180deg, #c2bdb6, #f5f7fa);
-    height: 90vh;
+    height: 90svh;
     padding: 50px 0;
     position: relative;
     display: flex;
@@ -101,6 +105,25 @@ body {
 @keyframes shineEffect {
     to {
         left: 125%;
+    }
+}
+
+.title-slash {
+    display: inline-block;
+    margin-right: 1rem;
+    width: 20px;
+    height: 3px;
+    background-color: #2c2c2c;
+    animation: move 6s linear infinite;
+}
+
+@keyframes move {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
     }
 }
 
