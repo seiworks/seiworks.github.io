@@ -1,0 +1,124 @@
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: #f5f7fa;
+    color: #2c2c2c;
+    overflow-x: hidden;
+}
+
+.firstView__container {
+    background: linear-gradient(180deg, #c2bdb6, #f5f7fa);
+    height: 80vh;
+    color: white;
+    padding: 50px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.firstView__container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300%;
+    height: 100%;
+    background: linear-gradient(85deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shine 5s infinite;
+}
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    50% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.firstView__box {
+    display: flex;
+    color: #333;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 auto;
+}
+
+.firstView__box .site-name {
+    font-size: 46px;
+    color: #3498db;
+    text-shadow: -3px 3px 2px rgba(255, 255, 255, 0.5);
+
+}
+
+.jump-emoji {
+    display: inline-block;
+    animation: jump 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+    transform-origin: 70% 70%;
+    font-size: 30px;
+    color: #225d85;
+    position: relative;
+}
+
+@keyframes jump {
+    0% {
+        transform: translateY(0);
+    }
+
+    75% {
+        transform: translateY(-3px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.shadow-circle {
+    position: absolute;
+    bottom: 0;
+    left: 27%;
+    width: 15px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    animation: shadowScale 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+
+@keyframes shadowScale {
+
+    0%,
+    100% {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+
+    75% {
+        transform: scale(1, 0.9);
+        opacity: 0.75;
+    }
+}
+
+.tagline {
+    background: #3498db;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+footer {
+    margin-top: 50px;
+    font-size: 0.8rem;
+    text-align: center;
+    color: #999;
+    display: fixed;
+    bottom: 0;
+}
