@@ -6,7 +6,7 @@ body {
 body {
     font-family: "Segoe UI", sans-serif;
     /* background: #f5f7fa; */
-    background: #FFFFF0;
+    background: #FFFFFF;
     color: #2c2c2c;
 }
 
@@ -26,7 +26,6 @@ body {
 
 .header {
     height: auto;
-    background-color: #225d85;
 }
 
 .navbar__bg {
@@ -36,6 +35,7 @@ body {
     width: 100%;
     background-color: rgba(255, 255, 255, 0);
     z-index: 999;
+    color: #FFFFFF;
 }
 
 .navbar .email {
@@ -56,7 +56,7 @@ body {
 /* First View */
 .firstView__container {
     /* background: linear-gradient(180deg, #c2bdb6, #f5f7fa); */
-    background: linear-gradient(180deg, #EAE0C8, #FFFFF0);
+    background: linear-gradient(180deg, #03579E 0%, #03579E 30%, #FFFFFF 100%);
     height: 90svh;
     padding: 50px 0;
     position: relative;
@@ -102,7 +102,7 @@ body {
     animation: jump 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
     transform-origin: 70% 70%;
     font-size: 30px;
-    color: #225d85;
+    color: #ffffff;
     position: relative;
 }
 
@@ -126,7 +126,7 @@ body {
     left: 25%;
     width: 15px;
     height: 2px;
-    background: rgba(0, 0, 0, 0.2);
+    background: #03579E;
     border-radius: 50%;
     animation: shadowScale 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 }
@@ -147,7 +147,7 @@ body {
 
 .site-name {
     font-size: 46px;
-    color: #3498db;
+    color: #ffffff;
     text-shadow: -3px 3px 2px rgba(255, 255, 255, 0.5);
     letter-spacing: 3px;
 }
@@ -162,7 +162,7 @@ body {
     animation: fadeInShine 3s ease-in-out forwards;
     animation-delay: 1s;
     overflow: hidden;
-    text-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 20px #fff;
+    text-shadow: 0 0 5px #fff, 0 0 5px #fff, 0 0 5px #fff;
 }
 
 
@@ -178,7 +178,7 @@ body {
 
     0%,
     100% {
-        text-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 20px #fff;
+        text-shadow: 0 0 5px #fff, 0 0 5px #fff, 0 0 5px #fff;
     }
 
     50% {
@@ -237,10 +237,10 @@ body {
 .title-highlight {
     font-family: 'Anton', sans-serif;
     font-size: 42px;
-    text-shadow: -12px 5px 15px #ced0d3;
+    text-shadow: -20px 5px 15px #03579e;
     /* color: white; */
-    color: #225d85;
-    letter-spacing: -0.1em;
+    color: #ffffff;
+    letter-spacing: -0.15rem;
     font-weight: 600;
 }
 
