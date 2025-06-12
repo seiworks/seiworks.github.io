@@ -29,8 +29,15 @@ body {
 }
 
 .logo {
-    width: 50%;
+    width: 30%;
     max-width: 250px;
+}
+
+@media screen and (max-width: 768px) {
+    .logo {
+        width: 50%;
+    }
+
 }
 
 .navbar__bg {
@@ -44,9 +51,20 @@ body {
     padding: 20px 10px;
 }
 
-.navbar .email {
-    font-size: 25px;
+.link-icons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 30px;
     font-weight: 600;
+    gap: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+    .link-icons {
+        font-size: 20px;
+    }
+
 }
 
 #footer {
