@@ -96,7 +96,7 @@
             <!-- main content -->
             <div class="col-10 mx-auto">
                 <!-- About Me -->
-                <div id="aboutMe">
+                <section id="aboutMe">
                     <h1>About Me</h1>
                     <div>text</div>
                     <div>text</div>
@@ -117,12 +117,12 @@
                     <div>text</div>
                     <div>text</div>
                     <div>text</div>
-                </div>
+                </section>
 
                 <div class="section-gap"></div>
 
                 <!-- About My Works -->
-                <div id="aboutMyWorks">
+                <section id="aboutMyWorks">
                     <h1>About My Works</h1>
                     <div>text</div>
                     <div>text</div>
@@ -143,12 +143,12 @@
                     <div>text</div>
                     <div>text</div>
                     <div>text</div>
-                </div>
+                </section>
 
                 <div class="section-gap"></div>
 
                 <!-- Other Links -->
-                <div id="otherLinks">
+                <section id="otherLinks">
                     <h1>Other Links</h1>
                     <div>text</div>
                     <div>text</div>
@@ -169,12 +169,12 @@
                     <div>text</div>
                     <div>text</div>
                     <div>text</div>
-                </div>
+                </section>
 
                 <div class="section-gap"></div>
 
                 <!-- Send Mail -->
-                <div id="sendMail">
+                <section id="sendMail">
                     <h1>Send Mail</h1>
                     <div>text</div>
                     <div>text</div>
@@ -195,7 +195,7 @@
                     <div>text</div>
                     <div>text</div>
                     <div>text</div>
-                </div>
+                </section>
             </div>
         </div>
 
@@ -208,5 +208,20 @@
         </script>
     </div>
 </body>
+<script>
+    // Scroll Event
+    window.addEventListener('scroll', function () {
+        const top = window.scrollY;
+        const linkIcons = document.querySelectorAll('.link-icon');
+        console.log(top)
+        linkIcons.forEach(function (linkIcon) {
+            if (top > 400) {
+                linkIcon.style.color = '#03579E';
+            } else {
+                linkIcon.style.color = '#ffffff';
+            }
+        })
+    });
+</script>
 
 </html>
