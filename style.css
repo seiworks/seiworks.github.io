@@ -276,7 +276,7 @@ body {
     font-size: 45px;
     position: absolute;
     top: 0px;
-    animation: jumpArrow 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+    animation: jumpArrow 1.5s ease-out infinite;
 }
 
 @keyframes jumpArrow {
