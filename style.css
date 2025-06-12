@@ -160,7 +160,7 @@ body {
     animation: fadeInShine 3s ease-in-out forwards;
     animation-delay: 1s;
     overflow: hidden;
-    text-shadow: -3px 3px 2px rgb(255, 255, 255);
+    text-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 20px #fff;
 }
 
 
@@ -176,7 +176,7 @@ body {
 
     0%,
     100% {
-        text-shadow: -3px 3px 2px rgb(255, 255, 255);
+        text-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 20px #fff;
     }
 
     50% {
