@@ -56,75 +56,9 @@ body {
 }
 
 .firstView__box {
-    display: flex;
     color: #2c2c2c;
     font-size: 28px;
     font-weight: 600;
-    margin: 0 auto;
-}
-
-.site-name {
-    font-size: 46px;
-    color: #3498db;
-    text-shadow: -3px 3px 2px rgba(255, 255, 255, 0.5);
-
-}
-
-.site-slogan {
-    display: inline-block;
-    font-size: 20px;
-    color: #225d85;
-    font-weight: bold;
-    position: relative;
-    opacity: 0;
-    animation: fadeInShine 3s ease-in-out forwards;
-    animation-delay: 1s;
-    overflow: hidden;
-    text-shadow: -3px 3px 2px rgba(255, 255, 255, 0.5);
-}
-
-.site-slogan::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -75%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-    transform: skewX(-20deg);
-    animation: shineEffect 3s ease-in-out forwards;
-    animation-delay: 1.5s;
-}
-
-@keyframes fadeInShine {
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes shineEffect {
-    to {
-        left: 125%;
-    }
-}
-
-.title-slash {
-    display: inline-block;
-    margin-right: 1rem;
-    width: 20px;
-    height: 3px;
-    background-color: #2c2c2c;
-    animation: move 6s linear infinite;
-}
-
-@keyframes move {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
 }
 
 .jump-emoji {
@@ -175,16 +109,136 @@ body {
     }
 }
 
+.site-name {
+    font-size: 46px;
+    color: #3498db;
+    text-shadow: -3px 3px 2px rgba(255, 255, 255, 0.5);
+    letter-spacing: 3px;
+}
+
+.site-slogan {
+    display: inline-block;
+    font-size: 22px;
+    color: #225d85;
+    font-weight: bold;
+    position: relative;
+    opacity: 0;
+    animation: fadeInShine 3s ease-in-out forwards;
+    animation-delay: 1s;
+    overflow: hidden;
+    text-shadow: -3px 3px 2px rgb(255, 255, 255);
+}
+
+
+@media screen and (max-width: 768px) {
+    .site-slogan {
+        opacity: 1;
+        animation: neon 1.5s ease-in-out forwards;
+        animation-delay: 1s;
+    }
+}
+
+@keyframes neon {
+
+    0%,
+    100% {
+        text-shadow: -3px 3px 2px rgb(255, 255, 255);
+    }
+
+    50% {
+        text-shadow: 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+        color: rgb(183, 190, 193);
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .site-slogan::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -75%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+        transform: skewX(-20deg);
+        animation: shineEffect 3s ease-in-out forwards;
+        animation-delay: 1.5s;
+    }
+
+    @keyframes fadeInShine {
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes shineEffect {
+        to {
+            left: 125%;
+        }
+    }
+}
+
+.title-slash {
+    display: inline-block;
+    margin-right: 1rem;
+    margin-left: 0.5rem;
+    width: 20px;
+    height: 3px;
+    background-color: #2c2c2c;
+    animation: move 6s linear infinite;
+}
+
+@keyframes move {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.title-highlight {
+    font-family: 'Anton', sans-serif;
+    font-size: 42px;
+    text-shadow: -12px 5px 15px #ced0d3;
+    color: white;
+    letter-spacing: -0.1em;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 768px) {
+    .title-highlight {
+        font-size: 32px;
+    }
+}
+
 .scroll-indicator {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    position: relative;
 }
 
-.scroll-indicator span {
+.scroll-indicator .fixed {
     font-size: 45px;
-    margin-top: -1.5rem;
+    position: absolute;
+    top: 0px;
+    opacity: 0.6;
+    animation: opacityTo0 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+
+@keyframes opacityTo0 {
+    to {
+        opacity: 0;
+    }
+}
+
+.scroll-indicator .move {
+    font-size: 45px;
+    position: absolute;
+    top: 0px;
     animation: jumpArrow 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 }
 
@@ -194,11 +248,11 @@ body {
     }
 
     45% {
-        transform: translateY(3px);
+        transform: translateY(7px);
     }
 
     75% {
-        transform: translateY(10px);
+        transform: translateY(12px);
     }
 
     100% {
@@ -221,7 +275,7 @@ body {
 }
 
 .navbar .email {
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 600;
 }
 
