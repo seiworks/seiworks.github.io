@@ -29,7 +29,8 @@ body {
 }
 
 .logo {
-    width: 40%;
+    width: 50%;
+    max-width: 250px;
 }
 
 .navbar__bg {
@@ -40,8 +41,7 @@ body {
     background-color: rgba(255, 255, 255, 0);
     z-index: 999;
     color: #FFFFFF;
-    height: 80px;
-    padding: 0 10px;
+    padding: 20px 10px;
 }
 
 .navbar .email {
@@ -209,6 +209,7 @@ body {
 }
 
 .firstView__box {
+    padding-top: 3rem;
     color: #2c2c2c;
     font-size: 28px;
     font-weight: 600;
