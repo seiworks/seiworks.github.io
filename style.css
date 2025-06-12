@@ -5,7 +5,8 @@ body {
 
 body {
     font-family: "Segoe UI", sans-serif;
-    background: #f5f7fa;
+    /* background: #f5f7fa; */
+    background: #FFFFF0;
     color: #2c2c2c;
 }
 
@@ -54,7 +55,8 @@ body {
 
 /* First View */
 .firstView__container {
-    background: linear-gradient(180deg, #c2bdb6, #f5f7fa);
+    /* background: linear-gradient(180deg, #c2bdb6, #f5f7fa); */
+    background: linear-gradient(180deg, #EAE0C8, #FFFFF0);
     height: 90svh;
     padding: 50px 0;
     position: relative;
@@ -236,7 +238,8 @@ body {
     font-family: 'Anton', sans-serif;
     font-size: 42px;
     text-shadow: -12px 5px 15px #ced0d3;
-    color: white;
+    /* color: white; */
+    color: #225d85;
     letter-spacing: -0.1em;
     font-weight: 600;
 }
