@@ -432,6 +432,7 @@ a {
     bottom: 5svh;
     right: 3rem;
     cursor: pointer;
+    display: none;
 }
 
 @media screen and (max-width: 540px) {
