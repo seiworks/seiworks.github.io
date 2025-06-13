@@ -12,7 +12,7 @@
         rel="stylesheet">
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css" />
     <title>SeiWorks | Developer Portfolio</title>
 </head>
@@ -213,11 +213,13 @@
     window.addEventListener('scroll', function () {
         const top = window.scrollY;
         const linkIcons = document.querySelectorAll('.link-icon');
-        console.log(top)
+        const logo = document.querySelector('.logo');
         linkIcons.forEach(function (linkIcon) {
             if (top > 400) {
+                logo.src = "images/logo_blue.png"
                 linkIcon.style.color = '#03579E';
             } else {
+                logo.src = "images/logo_white.png"
                 linkIcon.style.color = '#ffffff';
             }
         })
