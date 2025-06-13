@@ -235,7 +235,9 @@
             linkIcon.style.color = isScrolled ? '#03579E' : '#ffffff';
         });
         // logo color
-        logo.src = isScrolled ? 'images/logo_blue.svg' : 'images/logo_white.svg';
+        if (logo) {
+            logo.src = isScrolled ? 'images/logo_blue.svg' : 'images/logo_white.svg';
+        }
 
         // back to top button
         backToTop.style.display = isScrolled ? 'block' : 'none';
