@@ -201,10 +201,11 @@
 
         <!-- Back To Top -->
         <div class="backtotop__container">
-            <a href="/">
+            <a href="#" @click.prevent="scrollToTop">
                 <div class="backtotop__box">
-                    <span class="hand"></span>
-                    <span class="mdi mdi-human-female-dance"></span>
+                    <span class="mdi mdi-arrow-up-bold arrow"></span>
+                    <span class="mdi mdi-human-female-dance human"></span>
+                    <span class="text">Go<br>Top</span>
                 </div>
             </a>
         </div>
@@ -237,6 +238,11 @@
         // back to top button
         backToTop.style.display = isScrolled ? 'block' : 'none';
     });
+
+    // Back To Top
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 </script>
 
 </html>

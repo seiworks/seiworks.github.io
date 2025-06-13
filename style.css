@@ -28,6 +28,10 @@ section {
     scroll-margin-top: 100px;
 }
 
+a {
+    text-decoration: none;
+}
+
 /* Header */
 .header {
     height: auto;
@@ -426,21 +430,57 @@ section {
 .backtotop__container {
     position: fixed;
     bottom: 5svh;
-    right: 1rem;
+    right: 3rem;
     cursor: pointer;
 }
 
 .backtotop__box {
     width: 50px;
     height: 100px;
-    border: 1px solid #03579E;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
+    background-color: transparent;
+    position: relative;
 }
 
-.backtotop__box span {
-    font-size: 30px;
+.backtotop__box .human {
+    font-size: 50px;
     color: #03579E;
+}
+
+.backtotop__box .arrow {
+    font-size: 25px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #03579E;
+    animation: arrowMove 1s ease-in-out infinite;
+    transform-origin: bottom center;
+}
+
+@keyframes arrowMove {
+    0% {
+        transform: rotate(5deg);
+    }
+
+    50% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(5deg);
+    }
+}
+
+.backtotop__box .text {
+    font-size: 14px;
+    font-weight: bold;
+    color: #03579E;
+    position: absolute;
+    top: 60%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    rotate: 0deg;
+    line-height: 14px;
 }
