@@ -63,20 +63,19 @@ a {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    font-size: 30px;
     font-weight: 600;
     gap: 1rem;
 }
 
-@media screen and (max-width: 768px) {
-    .link-icons {
-        font-size: 20px;
-    }
-
+.link-icon {
+    font-size: 30px;
+    color: #FFFFFF;
 }
 
-.link-icon {
-    color: #FFFFFF;
+@media screen and (max-width: 540px) {
+    .link-icon {
+        font-size: 20px;
+    }
 }
 
 /* Footer */
@@ -450,12 +449,13 @@ a {
     justify-content: center;
     background-color: transparent;
     position: relative;
+    /* border: #03579E solid 1px; */
 }
 
 @media screen and (max-width: 540px) {
     .backtotop__box {
-        width: 30px;
-        height: 60px;
+        width: 40px;
+        height: 75px;
     }
 }
 
@@ -466,7 +466,7 @@ a {
 
 @media screen and (max-width: 540px) {
     .backtotop__box .human {
-        font-size: 30px;
+        font-size: 45px;
     }
 }
 
