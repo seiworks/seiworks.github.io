@@ -502,7 +502,7 @@ a {
 
 .backtotop__box .text {
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 600;
     color: #03579E;
     position: absolute;
     top: 60%;
@@ -514,9 +514,9 @@ a {
 
 @media screen and (max-width: 540px) {
     .backtotop__box .text {
-        font-size: 12px;
+        font-size: 13px;
         line-height: 12px;
-        top: 60%;
+        top: 63%;
         left: 100%;
     }
 }
