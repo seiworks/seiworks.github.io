@@ -12,7 +12,7 @@
         rel="stylesheet">
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="style.css" />
     <title>SeiWorks | Developer Portfolio</title>
 </head>
@@ -91,10 +91,10 @@
                 </div>
             </div>
 
-            <div class="section-gap"></div>
-
             <!-- main content -->
             <div class="col-10 mx-auto">
+                <div class="section-gap"></div>
+
                 <!-- About Me -->
                 <section id="aboutMe">
                     <h1>About Me</h1>
@@ -199,6 +199,16 @@
             </div>
         </div>
 
+        <!-- Back To Top -->
+        <div class="backtotop__container">
+            <a href="/">
+                <div class="backtotop__box">
+                    <span class="hand"></span>
+                    <span class="mdi mdi-human-female-dance"></span>
+                </div>
+            </a>
+        </div>
+
         <!-- footer include -->
         <div id="footer"></div>
         <script>
@@ -211,18 +221,21 @@
 <script>
     // Scroll Event
     window.addEventListener('scroll', function () {
-        const top = window.scrollY;
+        const backToTop = document.querySelector('.backtotop__container');
+        const currectTop = window.scrollY;
         const linkIcons = document.querySelectorAll('.link-icon');
         const logo = document.querySelector('.logo');
-        linkIcons.forEach(function (linkIcon) {
-            if (top > 400) {
-                logo.src = "images/logo_blue.png"
-                linkIcon.style.color = '#03579E';
-            } else {
-                logo.src = "images/logo_white.png"
-                linkIcon.style.color = '#ffffff';
-            }
-        })
+        const isScrolled = currectTop > 400;
+
+        // icon color
+        linkIcons.forEach(linkIcon => {
+            linkIcon.style.color = isScrolled ? '#03579E' : '#ffffff';
+        });
+        // logo color
+        logo.src = isScrolled ? 'images/logo_blue.svg' : 'images/logo_white.svg';
+
+        // back to top button
+        backToTop.style.display = isScrolled ? 'block' : 'none';
     });
 </script>
 

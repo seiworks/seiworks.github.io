@@ -21,12 +21,14 @@ body {
 
 .section-gap {
     height: 10rem;
+    background-color: #999999;
 }
 
 section {
     scroll-margin-top: 100px;
 }
 
+/* Header */
 .header {
     height: auto;
 }
@@ -73,6 +75,7 @@ section {
     color: #FFFFFF;
 }
 
+/* Footer */
 #footer {
     margin-top: 50px;
     font-size: 0.8rem;
@@ -412,3 +415,32 @@ section {
 }
 
 /* About Me */
+
+/* About My Works */
+
+/* Other Links */
+
+/* Send Mail */
+
+/* Back To Top */
+.backtotop__container {
+    position: fixed;
+    bottom: 5svh;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.backtotop__box {
+    width: 50px;
+    height: 100px;
+    border: 1px solid #03579E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+}
+
+.backtotop__box span {
+    font-size: 30px;
+    color: #03579E;
+}
