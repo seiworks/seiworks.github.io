@@ -1,3 +1,6 @@
+/* font */
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');
+
 html,
 body {
     overflow-x: hidden !important;
@@ -21,7 +24,6 @@ body {
 
 .section-gap {
     height: 10rem;
-    background-color: #999999;
 }
 
 section {
@@ -30,6 +32,36 @@ section {
 
 a {
     text-decoration: none;
+}
+
+.section__title-box {
+    width: 280px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.section__title-box:before {
+    content: "";
+    border-bottom: #2c2c2c dotted 3px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 80%;
+}
+
+.section__title {
+    font-size: 26px;
+    letter-spacing: 5px;
+    font-weight: 600;
+    color: #2c2c2c;
+}
+
+.section__title .big {
+    font-size: 36px;
+    font-weight: 600;
 }
 
 /* Header */
@@ -97,6 +129,7 @@ a {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    padding: 0 !important;
 }
 
 .float-up li {
@@ -315,14 +348,50 @@ a {
     }
 }
 
+.site-service {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 1024px) {
+    .site-service {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .site-service {
+        flex-direction: column;
+    }
+}
+
+.site-service p {
+    font-size: 16px;
+    margin-right: 1.3rem;
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 540px) {
+    .site-service p {
+        font-size: 22px;
+    }
+}
+
 .title-slash {
     display: inline-block;
-    margin-right: 1rem;
-    margin-left: 0.5rem;
-    width: 20px;
-    height: 3px;
+    margin-right: 0.3rem;
+    width: 15px;
+    height: 2px;
     background-color: #2c2c2c;
     animation: move 6s linear infinite;
+}
+
+@media screen and (max-width: 540px) {
+    .title-slash {
+        width: 18px;
+        height: 3px;
+    }
 }
 
 @keyframes move {
@@ -337,7 +406,7 @@ a {
 
 .title-highlight {
     font-family: 'Anton', sans-serif;
-    font-size: 42px;
+    font-size: 46px;
     text-shadow: -10px 5px 15px #03579e;
     /* color: white; */
     color: #ffffff;
@@ -348,9 +417,9 @@ a {
     animation-delay: 0.1s;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 540px) {
     .title-highlight {
-        font-size: 32px;
+        font-size: 34px;
     }
 }
 
@@ -418,6 +487,90 @@ a {
 }
 
 /* About Me */
+.aboutMe__container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100svh;
+    padding-top: 3rem;
+    gap: 1rem;
+}
+
+.aboutMe__box-left {
+    width: 50%;
+    height: auto;
+    aspect-ratio: 1/1;
+    background-color: #3b79b3;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 30px;
+    border-radius: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: #FFFFFF dotted 5px;
+    outline: #3b79b3 solid 5px;
+    box-sizing: border-box;
+}
+
+.aboutMe__box-left.animate {
+    animation: scaleIn 1.5s ease-in-out forwards;
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(1);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.aboutMe__box-right {
+    width: 50%;
+    height: auto;
+    aspect-ratio: 1/1;
+    background-color: #98bad8;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 30px;
+    border-radius: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: #ffffff dotted 5px;
+    outline: #98bad8 solid 5px;
+    box-sizing: border-box;
+}
+
+.aboutMe__box-right.animate {
+    animation: scaleIn 1.5s ease-in-out 0.3s forwards;
+}
+
+.level-line {
+    width: 80%;
+    height: 10px;
+    background: #03579E;
+    clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+    animation: line-reveal 1s ease-out forwards;
+    margin-right: 1rem;
+    margin-left: -5px;
+}
+
+@keyframes line-reveal {
+    to {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}
 
 /* About My Works */
 
@@ -483,6 +636,7 @@ a {
 @media screen and (max-width: 540px) {
     .backtotop__box .arrow {
         font-size: 15px;
+        right: 1px;
     }
 }
 
