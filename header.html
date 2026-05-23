@@ -3,21 +3,21 @@
         <nav class="navbar navbar__bg">
             <div class="container">
                 <div class="w-50">
-                    <a href="#" @click.prevent="scrollToTop">
+                    <a href="#" onclick="scrollToTop(); return false;">
                         <img src="images/logo_white.svg" alt="SeiWorks" class="logo">
                     </a>
                 </div>
                 <div class="w-50 link-icons">
-                    <a href="#aboutMe">
+                    <a href="#aboutMe" title="aboutMe">
                         <span class="mdi mdi-face-woman-profile link-icon"></span>
                     </a>
-                    <a href="#aboutMyWorks">
+                    <a href="#now" title="近況">
+                        <span class="mdi mdi-compass-outline link-icon"></span>
+                    </a>
+                    <a href="#aboutMySkills" title="aboutMySkills">
                         <span class="mdi mdi-text-box-check link-icon"></span>
                     </a>
-                    <a href="#otherLinks">
-                        <span class="mdi mdi-vector-link link-icon"></span>
-                    </a>
-                    <a href="#contact">
+                    <a href="#contact" title="contact">
                         <span class="mdi mdi-email-edit link-icon"></span>
                     </a>
                 </div>
