@@ -521,6 +521,13 @@ a {
     margin-top: 1rem;
 }
 
+@media screen and (max-width: 540px) {
+    .scroll-indicator {
+        border-top: 2px #f8fbfd solid;
+        margin-top: 0rem;
+    }
+}
+
 .scroll-indicator .fixed {
     font-size: 45px;
     position: absolute;
