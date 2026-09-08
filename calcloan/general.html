@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="一般房貸銀行方案試算及比較工具">
+    <link rel="icon" href="img/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <title>一般房貸試算｜SeiWorks</title>
+</head>
+
+<body class="mortgage-page general-loan-page">
+    <header class="mortgage-header">
+        <a href="../" class="mortgage-brand" aria-label="回到 SeiWorks 首頁">
+            <img src="img/logo_blue.svg" alt="SeiWorks">
+        </a>
+        <div>
+            <p class="mortgage-kicker">Mortgage Decision Desk</p>
+            <h1>一般房貸試算</h1>
+            <p>把各銀行提供的一般房貸方案放在同一張表，比較不同年限、寬限期與利率的現金流與總成本。</p>
+        </div>
+    </header>
+
+    <nav class="loan-mode-nav" aria-label="房貸試算模式">
+        <a href="index.html">新青安＋一般房貸</a>
+        <a href="general.html" aria-current="page">一般房貸</a>
+    </nav>
+
+    <main class="mortgage-shell">
+        <form id="mortgage-form" class="mortgage-form">
+            <section class="mortgage-section" aria-labelledby="property-title">
+                <div class="mortgage-section__heading">
+                    <span>01</span>
+                    <div>
+                        <h2 id="property-title">共同條件</h2>
+                        <p>輸入房屋總價，以及你認定的「最優」。</p>
+                    </div>
+                </div>
+
+                <div class="mortgage-fields mortgage-fields--two">
+                    <label class="mortgage-field">
+                        <span>房屋總價</span>
+                        <span class="mortgage-input-unit">
+                            <input id="house-price" type="number" min="1" step="1" value="1500" required>
+                            <b>萬元</b>
+                        </span>
+                    </label>
+
+                    <label class="mortgage-field">
+                        <span>你最在意什麼？</span>
+                        <select id="objective" aria-describedby="objective-help">
+                            <option value="totalCost" selected>全部繳完，利息與費用最少</option>
+                            <option value="postGracePayment">寬限期後，每月繳最少</option>
+                            <option value="peakPayment">任何月份都不要繳太高</option>
+                            <option value="paymentJump">寬限期結束，月付增加最少</option>
+                            <option value="fiveYearCost">只看前 5 年，利息與費用最少</option>
+                        </select>
+                        <small id="objective-help" class="mortgage-field-help"></small>
+                    </label>
+                </div>
+            </section>
+
+            <section class="mortgage-section mortgage-section--offers" aria-labelledby="offers-title">
+                <div class="mortgage-section__heading">
+                    <span>02</span>
+                    <div>
+                        <h2 id="offers-title">銀行報價方案</h2>
+                        <p>可加入不同銀行，或同銀行的不同年限與利率組合。</p>
+                    </div>
+                </div>
+                <div class="mortgage-offer-area">
+                    <div id="offer-list" class="mortgage-offer-list"></div>
+                    <button id="add-offer" type="button" class="mortgage-secondary-button">＋ 新增銀行方案</button>
+                </div>
+            </section>
+
+            <div class="mortgage-actions">
+                <button type="submit" class="mortgage-primary-button">開始比較</button>
+                <button id="reset-calculator" type="button" class="mortgage-reset-button">清除並重設</button>
+                <p id="form-error" role="alert" aria-live="polite"></p>
+            </div>
+        </form>
+
+        <aside class="mortgage-advice" aria-labelledby="advice-title">
+            <div>
+                <p class="mortgage-kicker">Before Signing</p>
+                <h2 id="advice-title">對保前固定建言</h2>
+            </div>
+            <ul>
+                <li>寬限期只是延後還本金，不會減少本金；期滿後月付通常會明顯上升。</li>
+                <li>不要只看名目利率，應把開辦費、帳管費與其他一次性費用一起比較。</li>
+                <li>比較最高月付與寬限期後的跳升金額，確認家庭現金流仍保有安全邊際。</li>
+                <li>確認機動利率調整方式，並用升息情境保留現金流安全邊際。</li>
+                <li>若可能提前清償或轉貸，簽約前確認限制期間與違約金計算方式。</li>
+            </ul>
+        </aside>
+
+        <section id="mortgage-results" class="mortgage-results" aria-labelledby="results-title">
+            <div class="mortgage-results__heading">
+                <div>
+                    <p class="mortgage-kicker">Comparison</p>
+                    <h2 id="results-title">方案比較</h2>
+                </div>
+                <p id="result-context"></p>
+            </div>
+
+            <article id="recommendation" class="mortgage-recommendation" aria-live="polite"></article>
+
+            <div class="mortgage-table-wrap">
+                <table class="mortgage-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">銀行／方案</th>
+                            <th scope="col">成數</th>
+                            <th scope="col">自備款</th>
+                            <th scope="col">初期月付</th>
+                            <th scope="col">寬限後月付</th>
+                            <th scope="col">最高月付</th>
+                            <th scope="col">利息＋費用</th>
+                            <th scope="col">貸款本金</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparison-body"></tbody>
+                </table>
+            </div>
+
+            <div id="loan-breakdown" class="mortgage-breakdown" aria-live="polite"></div>
+            <p class="mortgage-disclaimer">本工具採固定利率、本息平均攤還估算；寬限期內只繳利息。未計入開辦費、帳管費、保險、提前清償違約金、利率調整與銀行實際核貸條件，結果僅供對保比較。</p>
+        </section>
+    </main>
+
+    <template id="offer-template">
+        <article class="mortgage-offer">
+            <p class="mortgage-offer__index">方案 1</p>
+            <div class="mortgage-offer__top">
+                <label class="mortgage-field mortgage-offer__name">
+                    <span>銀行／方案名稱</span>
+                    <input class="offer-name" type="text" value="銀行方案" required>
+                </label>
+                <label class="mortgage-field mortgage-offer__ltv">
+                    <span>貸款成數</span>
+                    <select class="offer-ltv">
+                        <option value="0.75">75%</option>
+                        <option value="0.8" selected>80%</option>
+                    </select>
+                </label>
+                <button type="button" class="mortgage-remove-button" aria-label="刪除此方案">刪除</button>
+            </div>
+            <div class="mortgage-offer__fees">
+                <label class="mortgage-field"><span>開辦費</span><span class="mortgage-input-unit"><input class="origination-fee" type="number" min="0" step="1000" value="10000" required><b>元</b></span></label>
+                <label class="mortgage-field"><span>帳管費</span><span class="mortgage-input-unit"><input class="management-fee" type="number" min="0" step="1000" value="0" required><b>元</b></span></label>
+                <label class="mortgage-field"><span>其他一次性費用</span><span class="mortgage-input-unit"><input class="other-fee" type="number" min="0" step="1000" value="0" required><b>元</b></span></label>
+            </div>
+            <div class="mortgage-offer__loans mortgage-offer__loans--single">
+                <fieldset>
+                    <legend>一般房貸條件</legend>
+                    <label class="mortgage-field"><span>年限</span><span class="mortgage-input-unit"><input
+                                class="standard-years" type="number" min="1" max="50" value="30"
+                                required><b>年</b></span></label>
+                    <label class="mortgage-field"><span>寬限期</span><span class="mortgage-input-unit"><input
+                                class="standard-grace" type="number" min="0" max="10" value="0"
+                                required><b>年</b></span></label>
+                    <label class="mortgage-field"><span>利率</span><span class="mortgage-input-unit"><input
+                                class="standard-rate" type="number" min="0" max="20" step="0.001" value="2.5"
+                                required><b>%</b></span></label>
+                </fieldset>
+            </div>
+        </article>
+    </template>
+
+    <script src="js/general-calculator.js"></script>
+</body>
+
+</html>
