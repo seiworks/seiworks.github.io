@@ -4,10 +4,11 @@
 
 calcloan/ 是可獨立開啟及部署的純靜態房貸比較工具，不依賴根目錄網站的 CSS、JavaScript 或圖片。
 
-工具提供兩種模式：
+工具提供三種模式：
 
 - index.html：比較「新青安＋一般房貸」組合方案。
 - general.html：比較純一般房貸方案。
+- adjustment.html：預售屋面積找補、契約門檻與建商結算核對。
 
 兩頁都能新增多家銀行，或建立同一家銀行的多種年限、寬限期與利率方案。
 
@@ -18,11 +19,14 @@ calcloan/
 ├── ARCHITECTURE.md
 ├── index.html
 ├── general.html
+├── adjustment.html
+├── README.md
 ├── css/
 │   └── style.css
 ├── js/
 │   ├── calculator.js
-│   └── general-calculator.js
+│   ├── general-calculator.js
+│   └── adjustment.js
 └── img/
     ├── favicon.svg
     └── logo_blue.svg
@@ -34,9 +38,11 @@ calcloan/
 |---|---|
 | index.html | 組合房貸的輸入、比較表、結果區與方案模板 |
 | general.html | 一般房貸的輸入、比較表、結果區與方案模板 |
-| css/style.css | 兩頁共用的桌機、手機、固定選單及列印樣式 |
+| adjustment.html | 面積、分項價款、契約警示與建商結算核對介面 |
+| css/style.css | 三頁共用的桌機、手機、固定選單及列印樣式 |
 | js/calculator.js | 組合房貸拆分、試算、排序、動態方案與畫面更新 |
 | js/general-calculator.js | 一般房貸試算、排序、動態方案與畫面更新 |
+| js/adjustment.js | 找補精算、驗證、契約警示、localStorage 自動暫存與 JSON 備份還原 |
 | img/ | CalcLoan 自己使用的 favicon 與 Logo |
 
 ## 頁面切換
@@ -45,6 +51,7 @@ calcloan/
 
 - 新青安＋一般房貸 → index.html
 - 一般房貸 → general.html
+- 面積找補 → adjustment.html
 
 選單使用 sticky 定位，向下查看結果時仍停留在畫面頂端。aria-current 用來標示目前頁面。
 

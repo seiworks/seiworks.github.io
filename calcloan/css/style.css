@@ -934,6 +934,839 @@ input[type="checkbox"] {
     }
 }
 
+/* Area adjustment calculator */
+.adjustment-header h1 {
+    font-size: clamp(2.45rem, 5.5vw, 4.8rem);
+}
+
+.adjustment-summary {
+    margin-bottom: 24px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 10px 24px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: var(--shadow);
+}
+
+.adjustment-summary h2,
+.adjustment-summary p {
+    margin: 0;
+}
+
+.adjustment-summary #status-detail {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 0.84rem;
+}
+
+.legal-notice {
+    grid-column: 1 / -1;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--danger);
+    font-size: 0.8rem;
+    line-height: 1.65;
+}
+
+.status-pill {
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: var(--blue-dark);
+    background: var(--blue-soft);
+    font-size: 0.78rem;
+}
+
+.status-pill--ready {
+    color: var(--success);
+    background: var(--success-soft);
+}
+
+.status-pill--review {
+    color: #795200;
+    background: #fff3d6;
+}
+
+.data-toolbar {
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px 20px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.data-toolbar strong,
+.data-toolbar small {
+    display: block;
+}
+
+.data-toolbar small {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 0.72rem;
+}
+
+.data-toolbar__actions {
+    display: flex;
+    gap: 8px;
+}
+
+.data-toolbar .mortgage-secondary-button {
+    margin: 0;
+}
+
+.data-toolbar #storage-message {
+    min-height: 1.2em;
+    margin: 0;
+    grid-column: 1 / -1;
+    color: var(--blue);
+    font-size: 0.72rem;
+}
+
+.adjustment-basic-fields {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.reference-total {
+    margin-top: 22px;
+    padding: 17px 19px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 20px;
+    border-radius: 14px;
+    background: var(--blue-soft);
+}
+
+.reference-total span,
+.reference-total small {
+    color: var(--muted);
+}
+
+.reference-total small {
+    grid-column: 1 / -1;
+    font-size: 0.72rem;
+}
+
+.contract-details {
+    margin-top: 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+}
+
+.contract-details summary {
+    padding: 15px 18px;
+    color: var(--blue);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.contract-details ol,
+.contract-details p {
+    margin: 0 18px 18px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.8;
+}
+
+.clause4-inputs {
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--blue-soft);
+}
+
+.clause4-inputs__heading {
+    margin-bottom: 20px;
+}
+
+.clause4-inputs__heading h3,
+.clause4-inputs__heading p,
+.clause4-consistency p {
+    margin: 0;
+}
+
+.clause4-inputs__heading h3 {
+    font-size: 1rem;
+}
+
+.clause4-inputs__heading p {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.65;
+}
+
+.clause4-fields {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px 12px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.contract-form {
+    overflow: hidden;
+    border: 1px solid rgba(3, 87, 158, 0.18);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.82);
+}
+
+.contract-form__row {
+    min-height: 62px;
+    padding: 10px 14px;
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) minmax(160px, 0.45fr) minmax(130px, 0.35fr);
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--line);
+}
+
+.contract-form__row--total {
+    background: rgba(3, 87, 158, 0.06);
+    font-weight: 700;
+}
+
+.contract-form__row--indent-1 .contract-form__label {
+    padding-left: 22px;
+}
+
+.contract-form__row--indent-2 .contract-form__label {
+    padding-left: 44px;
+}
+
+.contract-form__row label {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 4.5em;
+    align-items: center;
+    gap: 8px;
+}
+
+.contract-form__row input {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--ink);
+    background: #fff;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.adjustment-page input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.adjustment-page input[type="number"]::-webkit-inner-spin-button,
+.adjustment-page input[type="number"]::-webkit-outer-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+}
+
+.contract-form__row input:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(3, 87, 158, 0.12);
+}
+
+.contract-form__row label b {
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-align: left;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.contract-form__label {
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+.contract-form__lead,
+.contract-form__clause {
+    margin: 0;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.78rem;
+}
+
+.contract-form__lead--indent {
+    padding-left: 58px;
+}
+
+.contract-form__row--ratio {
+    grid-template-columns: minmax(360px, 1fr) minmax(130px, 0.35fr);
+}
+
+.contract-form__row--ratio label {
+    grid-column: 2;
+}
+
+.contract-form__clause {
+    border-bottom: 0;
+    color: var(--ink);
+    line-height: 1.7;
+}
+
+.area-conversion {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.68rem;
+}
+
+.clause4-consistency {
+    margin-top: 18px;
+    padding: 13px 15px;
+    border-radius: 11px;
+    color: var(--blue-dark);
+    background: rgba(255, 255, 255, 0.76);
+    font-size: 0.76rem;
+    line-height: 1.65;
+}
+
+.clause4-consistency p + p {
+    margin-top: 5px;
+}
+
+.area-table-wrap {
+    overflow-x: auto;
+}
+
+.area-input-table {
+    width: 100%;
+    min-width: 1080px;
+    border-collapse: collapse;
+}
+
+.area-input-table th,
+.area-input-table td {
+    padding: 11px 8px;
+    border-bottom: 1px solid var(--line);
+    text-align: right;
+}
+
+.area-input-table th:first-child {
+    text-align: left;
+}
+
+.area-input-table thead th {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.area-input-table tbody th {
+    min-width: 145px;
+    font-size: 0.86rem;
+}
+
+.area-input-table tbody th small {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 0.67rem;
+    font-weight: 400;
+}
+
+.area-input-table td {
+    color: var(--ink);
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.area-input-table input {
+    width: 132px;
+    height: 42px;
+    padding: 0 9px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--ink);
+    background: #fff;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.area-input-table th:not(:first-child),
+.area-input-table td:not(:first-child) {
+    text-align: right;
+}
+
+.area-input-table input[readonly] {
+    color: var(--blue-dark);
+    background: var(--blue-soft);
+    cursor: default;
+}
+
+.area-input-table input:focus,
+.adjustment-page textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(3, 87, 158, 0.12);
+}
+
+.area-input-table .land-row {
+    background: #fbfaf6;
+}
+
+.area-input-table .is-negative {
+    color: var(--success);
+    font-weight: 700;
+}
+
+.area-input-table .is-positive {
+    color: var(--danger);
+    font-weight: 700;
+}
+
+.field-error,
+.form-message {
+    min-height: 1.25em;
+    color: var(--danger);
+    font-size: 0.72rem;
+}
+
+.declared-total-fields {
+    margin-top: 22px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+    gap: 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--paper);
+}
+
+.declared-total-fields__heading,
+.declared-total-fields .inline-note {
+    grid-column: 1 / -1;
+}
+
+.declared-total-fields__heading h3,
+.declared-total-fields__heading p {
+    margin: 0;
+}
+
+.declared-total-fields__heading h3 {
+    font-size: 1rem;
+}
+
+.declared-total-fields__heading p {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 0.76rem;
+    line-height: 1.6;
+}
+
+.declared-total-fields small {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.7rem;
+}
+
+.declared-total-fields input[readonly] {
+    color: var(--blue-dark);
+    background: var(--blue-soft);
+    cursor: default;
+}
+
+.inline-note {
+    padding: 14px 16px;
+    border-radius: 11px;
+    color: var(--muted);
+    background: var(--paper);
+    font-size: 0.78rem;
+    line-height: 1.6;
+}
+
+.calculation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.metric-card {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--paper);
+}
+
+.metric-card span,
+.metric-card strong,
+.metric-card small {
+    display: block;
+}
+
+.metric-card span {
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.metric-card strong {
+    margin: 9px 0 5px;
+    font-size: 1.35rem;
+}
+
+.metric-card small {
+    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1.55;
+}
+
+.metric-card--accent {
+    border-color: var(--blue);
+    background: var(--blue-soft);
+}
+
+.warning-list {
+    margin-top: 20px;
+    display: grid;
+    gap: 9px;
+}
+
+.warning-item {
+    margin: 0;
+    padding: 12px 15px;
+    border-left: 4px solid var(--blue);
+    border-radius: 8px;
+    color: var(--ink);
+    background: var(--blue-soft);
+    font-size: 0.8rem;
+    line-height: 1.65;
+}
+
+.warning-item--alert {
+    border-left-color: var(--danger);
+    background: #fff0ee;
+}
+
+.warning-item--success {
+    border-left-color: var(--success);
+    background: var(--success-soft);
+}
+
+.calculation-note {
+    margin-top: 20px;
+    padding: 18px;
+    border: 1px dashed var(--line);
+    border-radius: 13px;
+}
+
+.calculation-note p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.7;
+}
+
+.design-change {
+    margin: 20px 0;
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    border-radius: 13px;
+    background: var(--paper);
+    cursor: pointer;
+}
+
+.design-change input,
+.document-checklist input {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    accent-color: var(--blue);
+}
+
+.design-change small {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.adjustment-page textarea {
+    width: 100%;
+    padding: 12px 13px;
+    resize: vertical;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    color: var(--ink);
+    background: var(--surface);
+    font: inherit;
+}
+
+.builder-fields {
+    margin-bottom: 22px;
+    display: grid;
+    grid-template-columns: 0.7fr 1fr 1.25fr;
+    align-items: end;
+    gap: 18px;
+}
+
+.builder-difference {
+    min-height: 78px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    background: var(--paper);
+}
+
+.builder-difference span,
+.builder-difference small {
+    display: block;
+    color: var(--muted);
+    font-size: 0.7rem;
+}
+
+.builder-difference strong {
+    display: block;
+    margin: 4px 0;
+}
+
+.scenario-box p {
+    margin: 0 0 16px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.scenario-box > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.scenario-box .mortgage-secondary-button {
+    margin-top: 0;
+}
+
+.scenario-box small {
+    display: block;
+    margin-top: 12px;
+    color: var(--blue);
+}
+
+.document-checklist {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.document-checklist label {
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.output-actions {
+    margin-top: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.output-actions .mortgage-secondary-button {
+    margin-top: 0;
+}
+
+.file-button {
+    padding: 11px 18px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--blue);
+    background: var(--surface);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.file-button input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.adjustment-footer {
+    padding: 28px 4px;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.7;
+}
+
+.adjustment-footer p {
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .adjustment-basic-fields,
+    .calculation-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .builder-fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .clause4-fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .contract-form__row {
+        grid-template-columns: minmax(210px, 1fr) minmax(145px, 0.55fr) minmax(115px, 0.4fr);
+    }
+
+    .builder-difference {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 640px) {
+    .loan-mode-nav a {
+        padding: 10px 7px;
+        font-size: 0.7rem;
+    }
+
+    .adjustment-header h1 {
+        font-size: 2.35rem;
+        line-height: 1.02;
+    }
+
+    .adjustment-summary {
+        padding: 20px 18px;
+        grid-template-columns: 1fr;
+    }
+
+    .legal-notice {
+        grid-column: auto;
+    }
+
+    .status-pill {
+        justify-self: start;
+    }
+
+    .adjustment-basic-fields,
+    .calculation-grid,
+    .builder-fields,
+    .document-checklist {
+        grid-template-columns: 1fr;
+    }
+
+    .reference-total {
+        grid-template-columns: 1fr;
+    }
+
+    .reference-total small {
+        grid-column: auto;
+    }
+
+    .output-actions,
+    .scenario-box > div {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .output-actions button,
+    .file-button,
+    .scenario-box button {
+        width: 100%;
+        margin: 0;
+        text-align: center;
+    }
+
+    .adjustment-footer {
+        flex-direction: column;
+    }
+}
+
+@media print {
+    body {
+        background: #fff;
+        font-size: 10pt;
+    }
+
+    .adjustment-page .mortgage-header {
+        padding: 18px 0;
+        grid-template-columns: 100px 1fr;
+    }
+
+    .adjustment-page .mortgage-header h1 {
+        font-size: 26pt;
+    }
+
+    .loan-mode-nav,
+    .output-actions,
+    .scenario-box button,
+    .mortgage-primary-button,
+    .mortgage-secondary-button,
+    .mortgage-reset-button,
+    .file-button {
+        display: none !important;
+    }
+
+    .adjustment-summary,
+    .mortgage-form {
+        box-shadow: none;
+    }
+
+    .mortgage-section {
+        padding: 18px;
+        break-inside: avoid;
+    }
+
+    .area-table-wrap {
+        overflow: visible;
+    }
+
+    .area-input-table {
+        min-width: 0;
+        font-size: 8pt;
+    }
+
+    .area-input-table input {
+        width: 78px;
+        border: 0;
+    }
+
+    details {
+        display: none;
+    }
+}
+
 @media print {
     body {
         background: #fff;
@@ -954,5 +1787,301 @@ input[type="checkbox"] {
         padding: 0;
         border: 0;
         box-shadow: none;
+    }
+
+    .adjustment-page .mortgage-form {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .adjustment-page {
+        background-size: auto, 28px 28px, 28px 28px, auto;
+    }
+
+    .adjustment-page .mortgage-header,
+    .adjustment-page .mortgage-shell,
+    .adjustment-page .loan-mode-nav {
+        width: calc(100% - 20px);
+    }
+
+    .adjustment-page .mortgage-header {
+        padding: 24px 2px 22px;
+        gap: 22px;
+    }
+
+    .adjustment-page .mortgage-brand {
+        width: 116px;
+    }
+
+    .adjustment-page .mortgage-header h1 {
+        font-size: clamp(2rem, 10vw, 2.55rem);
+    }
+
+    .adjustment-page .mortgage-header > div > p:last-child {
+        margin-top: 16px;
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+
+    .adjustment-page .loan-mode-nav {
+        top: 6px;
+        margin-bottom: 16px;
+        padding: 4px;
+        gap: 3px;
+        border-radius: 16px;
+    }
+
+    .adjustment-page .loan-mode-nav a {
+        min-height: 42px;
+        padding: 7px 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        line-height: 1.25;
+    }
+
+    .adjustment-page .adjustment-summary {
+        margin-bottom: 16px;
+        padding: 18px 16px;
+        gap: 12px;
+        border-radius: 18px;
+    }
+
+    .adjustment-page .data-toolbar {
+        margin-bottom: 16px;
+        padding: 14px;
+        grid-template-columns: 1fr;
+    }
+
+    .adjustment-page .data-toolbar__actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .adjustment-page .data-toolbar__actions button,
+    .adjustment-page .data-toolbar__actions .file-button {
+        width: 100%;
+        min-height: 44px;
+        margin: 0;
+        padding: 10px 8px;
+        text-align: center;
+    }
+
+    .adjustment-page .mortgage-section {
+        gap: 20px;
+    }
+
+    .adjustment-page .mortgage-section__heading > span {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        flex: 0 0 34px;
+        place-items: center;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--blue);
+        font-size: 0.72rem;
+    }
+
+    .adjustment-page .mortgage-section__heading h2 {
+        font-size: 1.12rem;
+    }
+
+    .adjustment-page .mortgage-section__heading p {
+        margin-top: 7px;
+        font-size: 0.82rem;
+        line-height: 1.65;
+    }
+
+    .adjustment-page .mortgage-field > span:first-child,
+    .adjustment-page .mortgage-field legend {
+        font-size: 0.78rem;
+    }
+
+    .adjustment-page .mortgage-field input[type="number"],
+    .adjustment-page .mortgage-field input[type="text"],
+    .adjustment-page .mortgage-field select,
+    .adjustment-page textarea {
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    .adjustment-page .reference-total {
+        padding: 16px;
+        gap: 6px;
+    }
+
+    .adjustment-page .reference-total strong {
+        font-size: 1.12rem;
+    }
+
+    .adjustment-page .contract-details summary {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+
+    .adjustment-page .contract-details ol {
+        padding-left: 1.25rem;
+    }
+
+    .adjustment-page .area-table-wrap {
+        overflow: visible;
+    }
+
+    .adjustment-page .clause4-inputs {
+        padding: 16px;
+    }
+
+    .adjustment-page .clause4-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .adjustment-page .contract-form__row,
+    .adjustment-page .contract-form__row--ratio {
+        padding: 14px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .adjustment-page .contract-form__label,
+    .adjustment-page .contract-form__row--ratio .contract-form__label {
+        padding-left: 0;
+        grid-column: 1 / -1;
+        font-size: 0.82rem;
+    }
+
+    .adjustment-page .contract-form__row input {
+        height: 46px;
+        font-size: 16px;
+    }
+
+    .adjustment-page .contract-form__row--ratio label {
+        grid-column: 1 / -1;
+    }
+
+    .adjustment-page .contract-form__lead,
+    .adjustment-page .contract-form__lead--indent,
+    .adjustment-page .contract-form__clause {
+        padding: 11px 14px;
+    }
+
+    .adjustment-page .area-input-table,
+    .adjustment-page .area-input-table tbody,
+    .adjustment-page .area-input-table tr,
+    .adjustment-page .area-input-table th,
+    .adjustment-page .area-input-table td {
+        width: 100%;
+        min-width: 0;
+        display: block;
+    }
+
+    .adjustment-page .area-input-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+
+    .adjustment-page .area-input-table tbody {
+        display: grid;
+        gap: 14px;
+    }
+
+    .adjustment-page .area-input-table tr {
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--paper);
+    }
+
+    .adjustment-page .area-input-table tr.land-row {
+        background: #fbfaf6;
+    }
+
+    .adjustment-page .area-input-table tbody th {
+        margin-bottom: 14px;
+        padding: 0 0 12px;
+        border-bottom: 1px solid var(--line);
+        font-size: 1rem;
+    }
+
+    .adjustment-page .area-input-table tbody th small {
+        margin-top: 5px;
+        font-size: 0.72rem;
+    }
+
+    .adjustment-page .area-input-table td {
+        padding: 8px 0;
+        display: grid;
+        grid-template-columns: minmax(112px, 0.85fr) minmax(0, 1.15fr);
+        align-items: center;
+        gap: 12px;
+        border: 0;
+        text-align: right;
+        white-space: normal;
+        font-size: 0.88rem;
+    }
+
+    .adjustment-page .area-input-table td::before {
+        content: attr(data-label);
+        color: var(--muted);
+        text-align: left;
+        font-size: 0.74rem;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .adjustment-page .area-input-table td:nth-of-type(4) {
+        margin-top: 7px;
+        padding-top: 14px;
+        border-top: 1px dashed var(--line);
+    }
+
+    .adjustment-page .area-input-table input {
+        width: 100%;
+        height: 46px;
+        min-width: 0;
+        padding: 0 11px;
+        text-align: right;
+        font-size: 16px;
+    }
+
+    .adjustment-page .calculation-grid {
+        gap: 10px;
+    }
+
+    .adjustment-page .metric-card {
+        padding: 16px;
+    }
+
+    .adjustment-page .metric-card strong {
+        font-size: 1.2rem;
+    }
+
+    .adjustment-page .warning-item,
+    .adjustment-page .calculation-note {
+        font-size: 0.82rem;
+        line-height: 1.7;
+    }
+
+    .adjustment-page .design-change {
+        min-height: 52px;
+        align-items: flex-start;
+    }
+
+    .adjustment-page .document-checklist label {
+        min-height: 50px;
+        font-size: 0.85rem;
+    }
+
+    .adjustment-page .output-actions button,
+    .adjustment-page .file-button,
+    .adjustment-page .scenario-box button {
+        min-height: 48px;
     }
 }

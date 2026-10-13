@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="預售屋契約與登記面積差異及價款找補試算工具">
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+    <title>預售屋面積找補計算器｜SeiWorks</title>
+</head>
+
+<body class="mortgage-page adjustment-page">
+    <header class="mortgage-header adjustment-header">
+        <div class="mortgage-brand"><img src="img/logo_blue.svg" alt="SeiWorks"></div>
+        <div>
+            <p class="mortgage-kicker">Property Area Reconciliation</p>
+            <h1>面積找補計算器</h1>
+            <p>契約與權狀差異核對。逐項檢視主建物、附屬建物與共有部分，保留完整公式與待確認事項。</p>
+        </div>
+    </header>
+
+    <nav class="loan-mode-nav" aria-label="試算模式">
+        <a href="index.html">新青安＋一般房貸</a>
+        <a href="general.html">一般房貸</a>
+        <a href="adjustment.html" aria-current="page">面積找補</a>
+    </nav>
+
+    <main class="mortgage-shell adjustment-shell">
+        <section class="adjustment-summary" aria-labelledby="summary-title">
+            <div>
+                <p class="mortgage-kicker">Current Status</p>
+                <h2 id="summary-title">核對狀態</h2>
+                <p id="status-detail">尚未填妥可計算資料。</p>
+            </div>
+            <strong id="calculation-status" class="status-pill status-pill--incomplete">資料未齊</strong>
+            <p class="legal-notice">本工具為契約核對與初步試算，不是法律意見；試算結果不等於法律結論或建商最終應付金額。</p>
+        </section>
+
+        <section class="data-toolbar" aria-label="資料備份與還原">
+            <div><strong>資料備份</strong><small>輸入內容會自動暫存在此瀏覽器；重要資料建議另行匯出 JSON 備份。</small></div>
+            <div class="data-toolbar__actions">
+                <button id="save-data" type="button" class="mortgage-secondary-button">儲存資料</button>
+                <button id="export-data" type="button" class="mortgage-secondary-button">匯出 JSON</button>
+                <label class="file-button">匯入 JSON<input id="import-data" type="file" accept="application/json,.json"></label>
+            </div>
+            <p id="storage-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <form id="adjustment-form" class="mortgage-form" novalidate>
+            <section class="mortgage-section" aria-labelledby="basic-title">
+                <div class="mortgage-section__heading">
+                    <span>01</span>
+                    <div>
+                        <h2 id="basic-title">契約基本資料</h2>
+                        <p>請依正式契約輸入；空白代表未知，不會視為 0。</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mortgage-fields adjustment-basic-fields">
+                        <label class="mortgage-field"><span>成交總價</span><span class="mortgage-input-unit"><input
+                                    id="total-price" type="number" min="0" max="1000000"
+                                    step="0.01"><b>萬元</b></span><small class="field-error"
+                                data-error-for="total-price"></small></label>
+                        <label class="mortgage-field"><span>車位價款</span><span class="mortgage-input-unit"><input
+                                    id="parking-price" type="number" min="0" max="1000000"
+                                    step="0.01"><b>萬元</b></span><small class="field-error"
+                                data-error-for="parking-price"></small></label>
+                        <label class="mortgage-field"><span>車位面積（選填）</span><span class="mortgage-input-unit"><input
+                                    id="parking-area" type="number" min="0" max="100000"
+                                    step="0.0001"><b>坪</b></span></label>
+                        <label class="mortgage-field"><span>土地價款（選填）</span><span class="mortgage-input-unit"><input
+                                    id="land-price" type="number" min="0" max="1000000"
+                                    step="0.01"><b>萬元</b></span></label>
+                    </div>
+                    <div class="reference-total"><span>總價扣車位參考金額</span><strong
+                            id="price-excluding-parking">—</strong><small>兩項均輸入後自動計算。僅供對帳，不等於三類房屋價款總和，因成交總價可能包含土地價款。</small>
+                    </div>
+                    <details class="contract-details">
+                        <summary>閱讀契約第四條第一項</summary>
+                        <p>本房屋面積共計＿＿平方公尺（＿＿坪），包含：</p>
+                        <ol>
+                            <li>專有部分面積＿＿平方公尺（＿＿坪）：主建物面積＿＿平方公尺（＿＿坪）；附屬建物面積＿＿平方公尺（＿＿坪），包括陽臺，以及中華民國一百零七年一月一日前已申請建造執照者之雨遮。
+                            </li>
+                            <li>共有部分持分面積約＿＿平方公尺（＿＿坪）。</li>
+                            <li>本約房屋主建物面積占本約房屋得登記總面積之比例＿＿%。</li>
+                            <li>前第一項及第二項所列面積與地政機關登記面積有誤時，雙方應以第六條面積誤差及價差找補約定互為找補。</li>
+                        </ol>
+                    </details>
+                    <details class="contract-details">
+                        <summary>閱讀契約第六條</summary>
+                        <ol>
+                            <li>房屋面積以地政機關登記完竣之面積為準，房屋部分原可依法登記之面積，倘因簽約後法令改變，致無法辦理建物所有權第一次登記時，其面積應依公寓大廈管理條例第五十六條第三項之規定計算。
+                            </li>
+                            <li>依第四條第一項計算主建物或本房屋登記總面積如有誤差，其不足部分賣方均應全部找補；其超過部分，買方只找補百分之二為限（至多找補不超過百分之二），且雙方同意房屋面積誤差之找補，分別以主建物、附屬建物（不含雨遮面積）、共有部分房屋價款除以各該面積所得之單價（應扣除汽車停車位價款及面積）計算誤差價款，無息於交屋時結算。
+                            </li>
+                            <li>前項之主建物或本約房屋登記總面積如有誤差超過百分之三者，買方得解除本約。</li>
+                            <li>如因主管機關法令函示變更見解，導致登記面積之計算基礎改變，致使本約房屋登記面積有所誤差，雙方皆同意依第六條第一、二項之方式辦理。</li>
+                        </ol>
+                        <p>第四條第一項與第六條均已由使用者提供；其他相關約定仍須以正式完整契約核對。</p>
+                    </details>
+                </div>
+            </section>
+
+            <section class="mortgage-section mortgage-section--offers" aria-labelledby="area-title">
+                <div class="mortgage-section__heading">
+                    <span>02</span>
+                    <div>
+                        <h2 id="area-title">面積與分項價款</h2>
+                        <p>先填第四條記載值，再填各分項實際登記面積與價款。空白代表未知，不會視為 0。</p>
+                    </div>
+                </div>
+                <div class="clause4-inputs" aria-labelledby="clause4-input-title">
+                    <div class="clause4-inputs__heading">
+                        <h3 id="clause4-input-title">第四條　房屋出售面積及認定標準</h3>
+                        <p>依契約書順序填寫；輸入其中一個單位會自動換算另一個，手動修改後會保留您輸入的數值。</p>
+                    </div>
+                    <div class="contract-form" aria-label="第四條第一項面積輸入">
+                        <div class="contract-form__row contract-form__row--total">
+                            <span class="contract-form__label">本房屋面積共計</span>
+                            <label><span class="visually-hidden">本房屋面積平方公尺</span><input id="contract-total-area-sqm" data-area-pair="contract-total-area" data-area-unit="sqm" type="number" min="0.0001" max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">本房屋面積坪</span><input id="contract-total-area" data-area-pair="contract-total-area-sqm" data-area-unit="ping" type="number" min="0.0001" max="100000" step="0.0001"><b>坪</b></label>
+                        </div>
+                        <p class="contract-form__lead">包含：</p>
+                        <div class="contract-form__row">
+                            <span class="contract-form__label">一、專有部分面積</span>
+                            <label><span class="visually-hidden">專有部分平方公尺</span><input id="exclusive-area-sqm" data-area-pair="exclusive-area" data-area-unit="sqm" type="number" min="0.0001" max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">專有部分坪</span><input id="exclusive-area" data-area-pair="exclusive-area-sqm" data-area-unit="ping" type="number" min="0.0001" max="100000" step="0.0001"><b>坪</b></label>
+                        </div>
+                        <div class="contract-form__row contract-form__row--indent-1">
+                            <span class="contract-form__label">（一）主建物面積</span>
+                            <label><span class="visually-hidden">主建物平方公尺</span><input id="clause-main-area-sqm" data-area-pair="clause-main-area" data-area-unit="sqm" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">主建物坪</span><input id="clause-main-area" data-area-pair="clause-main-area-sqm" data-area-unit="ping" data-category-sync="main" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>坪</b></label>
+                        </div>
+                        <div class="contract-form__row contract-form__row--indent-1">
+                            <span class="contract-form__label">（二）附屬建物面積</span>
+                            <label><span class="visually-hidden">附屬建物平方公尺</span><input id="clause-accessory-area-sqm" data-area-pair="clause-accessory-area" data-area-unit="sqm" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">附屬建物坪</span><input id="clause-accessory-area" data-area-pair="clause-accessory-area-sqm" data-area-unit="ping" data-category-sync="accessory" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>坪</b></label>
+                        </div>
+                        <p class="contract-form__lead contract-form__lead--indent">包括：</p>
+                        <div class="contract-form__row contract-form__row--indent-2">
+                            <span class="contract-form__label">□ 陽臺</span>
+                            <label><span class="visually-hidden">陽臺平方公尺</span><input id="balcony-area-sqm" data-area-pair="balcony-area" data-area-unit="sqm" type="number" min="0" max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">陽臺坪</span><input id="balcony-area" data-area-pair="balcony-area-sqm" data-area-unit="ping" type="number" min="0" max="100000" step="0.0001"><b>坪</b></label>
+                        </div>
+                        <div class="contract-form__row contract-form__row--indent-2 contract-form__row--long">
+                            <span class="contract-form__label">☑ 中華民國一百零七年一月一日前已申請建造執照者，其雨遮</span>
+                            <label><span class="visually-hidden">雨遮平方公尺</span><input id="rain-cover-area-sqm" data-area-pair="rain-cover-area" data-area-unit="sqm" type="number" min="0" max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">雨遮坪</span><input id="rain-cover-area" data-area-pair="rain-cover-area-sqm" data-area-unit="ping" type="number" min="0" max="100000" step="0.0001"><b>坪</b></label>
+                        </div>
+                        <div class="contract-form__row">
+                            <span class="contract-form__label">二、共有部分持分面積約</span>
+                            <label><span class="visually-hidden">共有部分平方公尺</span><input id="clause-shared-area-sqm" data-area-pair="clause-shared-area" data-area-unit="sqm" type="number" min="0.0001" max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">共有部分坪</span><input id="clause-shared-area" data-area-pair="clause-shared-area-sqm" data-area-unit="ping" data-category-sync="shared" type="number" min="0.0001" max="100000" step="0.0001"><b>坪</b></label>
+                        </div>
+                        <div class="contract-form__row contract-form__row--ratio">
+                            <span class="contract-form__label">三、本約房屋主建物面積占本約房屋得登記總面積之比例</span>
+                            <label><span class="visually-hidden">主建物比例</span><input id="contract-main-ratio" type="number" min="0" max="100" step="0.01" placeholder="自動計算，可修改" title="依主建物契約面積除以房屋契約總面積自動計算，仍可手動修改"><b>%</b></label>
+                        </div>
+                        <p class="contract-form__clause">四、前第一項及第二項所列面積與地政機關登記面積有誤時，雙方應以第六條面積誤差及價差找補約定互為找補。</p>
+                    </div>
+                    <div id="clause4-consistency" class="clause4-consistency" aria-live="polite" hidden></div>
+                </div>
+                <div class="area-table-wrap">
+                    <table class="area-input-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">類別</th>
+                                <th scope="col">契約面積（坪）</th>
+                                <th scope="col">實際登記（坪）</th>
+                                <th scope="col">契約分項價款（萬元）</th>
+                                <th scope="col">面積差額</th>
+                                <th scope="col">誤差率</th>
+                                <th scope="col">單價／坪</th>
+                                <th scope="col">未套用上限價差</th>
+                            </tr>
+                        </thead>
+                        <tbody id="area-rows">
+                            <tr data-category="main">
+                                <th scope="row">主建物<small>契約面積同步自第四條</small></th>
+                                <td data-label="契約面積（坪）"><input data-field="contractArea" aria-label="主建物契約面積"
+                                        type="number" min="0.0001" max="100000" step="0.0001" readonly></td>
+                                <td data-label="實際登記（坪）"><input data-field="actualArea" aria-label="主建物實際登記面積"
+                                        type="number" min="0" max="100000" step="0.0001"></td>
+                                <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="主建物契約分項價款（萬元）"
+                                        type="number" min="0" max="1000000" step="0.01"></td>
+                                <td data-label="面積差額" data-output="difference">—</td>
+                                <td data-label="誤差率" data-output="rate">—</td>
+                                <td data-label="單價／坪" data-output="unitPrice">—</td>
+                                <td data-label="未套用上限價差" data-output="amount">—</td>
+                            </tr>
+                            <tr data-category="accessory">
+                                <th scope="row">附屬建物<small>契約面積同步自第四條；找補不含雨遮</small></th>
+                                <td data-label="契約面積（坪）"><input data-field="contractArea" aria-label="附屬建物契約面積"
+                                        type="number" min="0.0001" max="100000" step="0.0001" readonly></td>
+                                <td data-label="實際登記（坪）"><input data-field="actualArea" aria-label="附屬建物實際登記面積"
+                                        type="number" min="0" max="100000" step="0.0001"></td>
+                                <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="附屬建物契約分項價款（萬元）"
+                                        type="number" min="0" max="1000000" step="0.01"></td>
+                                <td data-label="面積差額" data-output="difference">—</td>
+                                <td data-label="誤差率" data-output="rate">—</td>
+                                <td data-label="單價／坪" data-output="unitPrice">—</td>
+                                <td data-label="未套用上限價差" data-output="amount">—</td>
+                            </tr>
+                            <tr data-category="shared">
+                                <th scope="row">共有部分<small>契約面積同步自第四條；不含車位</small></th>
+                                <td data-label="契約面積（坪）"><input data-field="contractArea" aria-label="共有部分契約面積"
+                                        type="number" min="0.0001" max="100000" step="0.0001" readonly></td>
+                                <td data-label="實際登記（坪）"><input data-field="actualArea" aria-label="共有部分實際登記面積"
+                                        type="number" min="0" max="100000" step="0.0001"></td>
+                                <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="共有部分契約分項價款（萬元）"
+                                        type="number" min="0" max="1000000" step="0.01"></td>
+                                <td data-label="面積差額" data-output="difference">—</td>
+                                <td data-label="誤差率" data-output="rate">—</td>
+                                <td data-label="單價／坪" data-output="unitPrice">—</td>
+                                <td data-label="未套用上限價差" data-output="amount">—</td>
+                            </tr>
+                            <tr data-category="land" class="land-row">
+                                <th scope="row">土地<small>獨立紀錄，不套房屋公式</small></th>
+                                <td data-label="契約面積（坪）"><input data-field="contractArea" aria-label="土地契約面積"
+                                        type="number" min="0.0001" max="100000" step="0.0001"></td>
+                                <td data-label="實際登記（坪）"><input data-field="actualArea" aria-label="土地實際登記面積"
+                                        type="number" min="0" max="100000" step="0.0001"></td>
+                                <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="土地契約分項價款（萬元）" type="number"
+                                        min="0" max="1000000" step="0.01"></td>
+                                <td data-label="面積差額" data-output="difference">—</td>
+                                <td data-label="誤差率" data-output="rate">待核對</td>
+                                <td data-label="單價／坪" data-output="unitPrice">待核對</td>
+                                <td data-label="房屋找補" data-output="amount">不計入</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p id="area-error" class="form-message" role="alert" aria-live="polite"></p>
+                <div class="declared-total-fields">
+                    <div class="declared-total-fields__heading">
+                        <h3>房屋登記總面積</h3>
+                        <p>契約面積同步第四條；實際登記面積請依權狀或謄本輸入，均不重複計入車位。</p>
+                    </div>
+                    <label class="mortgage-field"><span>契約面積</span><span class="mortgage-input-unit"><input
+                                id="registered-contract-total-area" type="number" readonly><b>坪</b></span><small>同步自第四條「本房屋面積共計」</small></label>
+                    <label class="mortgage-field"><span>實際登記面積</span><span class="mortgage-input-unit"><input
+                                id="declared-total-area" type="number" min="0" max="100000"
+                                step="0.01"><b>坪</b></span><small>請依權狀或建物登記謄本輸入</small></label>
+                    <div id="total-consistency" class="inline-note">尚未輸入可核對的總面積。</div>
+                </div>
+            </section>
+
+            <section class="mortgage-section mortgage-section--offers" aria-labelledby="result-title">
+                <div class="mortgage-section__heading"><span>03</span>
+                    <div>
+                        <h2 id="result-title">核心計算與警示</h2>
+                        <p>已輸入第四條契約總面積時優先採用；未輸入時才以三個房屋分項加總暫估。</p>
+                    </div>
+                </div>
+                <div class="calculation-grid">
+                    <article class="metric-card"><span>主建物誤差率</span><strong id="main-rate">—</strong><small
+                            id="main-formula">（實際 − 契約）÷ 契約</small></article>
+                    <article class="metric-card"><span id="total-difference-label">總面積差</span><strong
+                            id="total-difference">—</strong><small id="total-area-formula">面積資料尚未齊全</small></article>
+                    <article class="metric-card"><span id="total-rate-label">總面積誤差率</span><strong
+                            id="total-rate">—</strong><small id="total-rate-note">優先採用第四條契約總面積</small></article>
+                    <article class="metric-card metric-card--accent"><span>未調整參考淨額</span><strong
+                            id="reference-net">—</strong><small>分項價差加總；尚未套用契約上限</small></article>
+                </div>
+                <div id="warnings" class="warning-list" aria-live="polite"></div>
+                <div class="calculation-note"><strong>避免重複計價</strong>
+                    <p>主建物及登記總面積的誤差率用於判讀契約門檻；退款／補款金額只依各房屋分項差額計入一次。不能以公設增加直接推定主建物縮小已獲補償，也不以總面積淨差乘平均成交單價。</p>
+                </div>
+                <label class="design-change"><input id="suspected-change"
+                        type="checkbox"><span><strong>疑似設計變更</strong><small>面積誤差與設計變更是不同議題，請另行比對原始圖說、變更圖說及買方同意紀錄。</small></span></label>
+                <label class="mortgage-field"><span>設計變更備註</span><textarea id="change-notes" rows="3" maxlength="2000"
+                        placeholder="紀錄圖說差異、日期或待確認事項"></textarea></label>
+            </section>
+
+            <section class="mortgage-section" aria-labelledby="builder-title">
+                <div class="mortgage-section__heading"><span>04</span>
+                    <div>
+                        <h2 id="builder-title">建商結算核對</h2>
+                        <p>比較建商提出的淨額與未調整參考淨額，差額本身不是建商算錯的證據。</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="builder-fields">
+                        <label class="mortgage-field"><span>結算方向</span><select id="builder-direction">
+                                <option value="refund">建商退款給買方</option>
+                                <option value="payment">買方補款給建商</option>
+                            </select></label>
+                        <label class="mortgage-field"><span>建商提出金額</span><span class="mortgage-input-unit"><input
+                                    id="builder-amount" type="number" min="0" max="1000000"
+                                    step="0.01"><b>萬元</b></span></label>
+                        <div class="builder-difference"><span>與未調整參考淨額差額</span><strong
+                                id="builder-difference">—</strong><small>契約適用細節尚未確認時，此差額僅供提出問題。</small></div>
+                    </div>
+                    <label class="mortgage-field"><span>建商計算明細、計算基準、待詢問問題、文件日期</span><textarea id="builder-notes"
+                            rows="5" maxlength="5000" placeholder="例如：請建商提供三類分項單價與 2% 上限套用方式"></textarea></label>
+                </div>
+            </section>
+
+        </form>
+
+        <footer class="adjustment-footer">
+            <p>計算精度：面積內部保留至少 4 位小數；各分項未調整價差以精確單價計算後四捨五入至整數新台幣。</p>
+            <p>產出日期：<time id="generated-at"></time></p>
+        </footer>
+    </main>
+
+    <script type="module" src="js/adjustment.js"></script>
+</body>
+
+</html>
