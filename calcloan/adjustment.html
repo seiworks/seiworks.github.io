@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="預售屋契約與登記面積差異及價款找補試算工具">
     <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=5">
     <title>預售屋面積找補計算器｜SeiWorks</title>
 </head>
 
@@ -42,7 +42,8 @@
             <div class="data-toolbar__actions">
                 <button id="save-data" type="button" class="mortgage-secondary-button">儲存資料</button>
                 <button id="export-data" type="button" class="mortgage-secondary-button">匯出 JSON</button>
-                <label class="file-button">匯入 JSON<input id="import-data" type="file" accept="application/json,.json"></label>
+                <label class="file-button">匯入 JSON<input id="import-data" type="file"
+                        accept="application/json,.json"></label>
             </div>
             <p id="storage-message" role="status" aria-live="polite"></p>
         </section>
@@ -80,7 +81,7 @@
                         <summary>閱讀契約第四條第一項</summary>
                         <p>本房屋面積共計＿＿平方公尺（＿＿坪），包含：</p>
                         <ol>
-                            <li>專有部分面積＿＿平方公尺（＿＿坪）：主建物面積＿＿平方公尺（＿＿坪）；附屬建物面積＿＿平方公尺（＿＿坪），包括陽臺，以及中華民國一百零七年一月一日前已申請建造執照者之雨遮。
+                            <li>專有部分面積＿＿平方公尺（＿＿坪）：主建物面積＿＿平方公尺（＿＿坪）；附屬建物面積＿＿平方公尺（＿＿坪），包括陽臺。本契約「中華民國一百零七年一月一日前已申請建造執照者之雨遮」欄位不適用，無雨遮面積。
                             </li>
                             <li>共有部分持分面積約＿＿平方公尺（＿＿坪）。</li>
                             <li>本約房屋主建物面積占本約房屋得登記總面積之比例＿＿%。</li>
@@ -118,44 +119,78 @@
                     <div class="contract-form" aria-label="第四條第一項面積輸入">
                         <div class="contract-form__row contract-form__row--total">
                             <span class="contract-form__label">本房屋面積共計</span>
-                            <label><span class="visually-hidden">本房屋面積平方公尺</span><input id="contract-total-area-sqm" data-area-pair="contract-total-area" data-area-unit="sqm" type="number" min="0.0001" max="100000" step="0.0001"><b>平方公尺</b></label>
-                            <label><span class="visually-hidden">本房屋面積坪</span><input id="contract-total-area" data-area-pair="contract-total-area-sqm" data-area-unit="ping" type="number" min="0.0001" max="100000" step="0.0001"><b>坪</b></label>
+                            <label><span class="visually-hidden">本房屋面積平方公尺</span><input id="contract-total-area-sqm"
+                                    data-area-pair="contract-total-area" data-area-unit="sqm" type="number" min="0.0001"
+                                    max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">本房屋面積坪</span><input id="contract-total-area"
+                                    data-area-pair="contract-total-area-sqm" data-area-unit="ping" type="number"
+                                    min="0.0001" max="100000" step="0.0001"><b>坪</b></label>
                         </div>
                         <p class="contract-form__lead">包含：</p>
                         <div class="contract-form__row">
                             <span class="contract-form__label">一、專有部分面積</span>
-                            <label><span class="visually-hidden">專有部分平方公尺</span><input id="exclusive-area-sqm" data-area-pair="exclusive-area" data-area-unit="sqm" type="number" min="0.0001" max="100000" step="0.0001"><b>平方公尺</b></label>
-                            <label><span class="visually-hidden">專有部分坪</span><input id="exclusive-area" data-area-pair="exclusive-area-sqm" data-area-unit="ping" type="number" min="0.0001" max="100000" step="0.0001"><b>坪</b></label>
+                            <label><span class="visually-hidden">專有部分平方公尺</span><input id="exclusive-area-sqm"
+                                    data-area-pair="exclusive-area" data-area-unit="sqm" type="number" min="0.0001"
+                                    max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">專有部分坪</span><input id="exclusive-area"
+                                    data-area-pair="exclusive-area-sqm" data-area-unit="ping" type="number" min="0.0001"
+                                    max="100000" step="0.0001"><b>坪</b></label>
                         </div>
                         <div class="contract-form__row contract-form__row--indent-1">
                             <span class="contract-form__label">（一）主建物面積</span>
-                            <label><span class="visually-hidden">主建物平方公尺</span><input id="clause-main-area-sqm" data-area-pair="clause-main-area" data-area-unit="sqm" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>平方公尺</b></label>
-                            <label><span class="visually-hidden">主建物坪</span><input id="clause-main-area" data-area-pair="clause-main-area-sqm" data-area-unit="ping" data-category-sync="main" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>坪</b></label>
+                            <label><span class="visually-hidden">主建物平方公尺</span><input id="clause-main-area-sqm"
+                                    data-area-pair="clause-main-area" data-area-unit="sqm" type="text"
+                                    inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">主建物坪</span><input id="clause-main-area"
+                                    data-area-pair="clause-main-area-sqm" data-area-unit="ping"
+                                    data-category-sync="main" type="text" inputmode="decimal"
+                                    pattern="[0-9]*[.,]?[0-9]*"><b>坪</b></label>
                         </div>
                         <div class="contract-form__row contract-form__row--indent-1">
                             <span class="contract-form__label">（二）附屬建物面積</span>
-                            <label><span class="visually-hidden">附屬建物平方公尺</span><input id="clause-accessory-area-sqm" data-area-pair="clause-accessory-area" data-area-unit="sqm" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>平方公尺</b></label>
-                            <label><span class="visually-hidden">附屬建物坪</span><input id="clause-accessory-area" data-area-pair="clause-accessory-area-sqm" data-area-unit="ping" data-category-sync="accessory" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>坪</b></label>
+                            <label><span class="visually-hidden">附屬建物平方公尺</span><input id="clause-accessory-area-sqm"
+                                    data-area-pair="clause-accessory-area" data-area-unit="sqm" type="text"
+                                    inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">附屬建物坪</span><input id="clause-accessory-area"
+                                    data-area-pair="clause-accessory-area-sqm" data-area-unit="ping"
+                                    data-category-sync="accessory" type="text" inputmode="decimal"
+                                    pattern="[0-9]*[.,]?[0-9]*"><b>坪</b></label>
                         </div>
                         <p class="contract-form__lead contract-form__lead--indent">包括：</p>
                         <div class="contract-form__row contract-form__row--indent-2">
                             <span class="contract-form__label">□ 陽臺</span>
-                            <label><span class="visually-hidden">陽臺平方公尺</span><input id="balcony-area-sqm" data-area-pair="balcony-area" data-area-unit="sqm" type="number" min="0" max="100000" step="0.0001"><b>平方公尺</b></label>
-                            <label><span class="visually-hidden">陽臺坪</span><input id="balcony-area" data-area-pair="balcony-area-sqm" data-area-unit="ping" type="number" min="0" max="100000" step="0.0001"><b>坪</b></label>
+                            <label><span class="visually-hidden">陽臺平方公尺</span><input id="balcony-area-sqm"
+                                    data-area-pair="balcony-area" data-area-unit="sqm" type="number" min="0"
+                                    max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">陽臺坪</span><input id="balcony-area"
+                                    data-area-pair="balcony-area-sqm" data-area-unit="ping" type="number" min="0"
+                                    max="100000" step="0.0001"><b>坪</b></label>
                         </div>
-                        <div class="contract-form__row contract-form__row--indent-2 contract-form__row--long">
-                            <span class="contract-form__label">☑ 中華民國一百零七年一月一日前已申請建造執照者，其雨遮</span>
-                            <label><span class="visually-hidden">雨遮平方公尺</span><input id="rain-cover-area-sqm" data-area-pair="rain-cover-area" data-area-unit="sqm" type="number" min="0" max="100000" step="0.0001"><b>平方公尺</b></label>
-                            <label><span class="visually-hidden">雨遮坪</span><input id="rain-cover-area" data-area-pair="rain-cover-area-sqm" data-area-unit="ping" type="number" min="0" max="100000" step="0.0001"><b>坪</b></label>
+                        <div
+                            class="contract-form__row contract-form__row--indent-2 contract-form__row--long contract-form__row--disabled">
+                            <span class="contract-form__label">☒ 中華民國一百零七年一月一日前已申請建造執照（本契約無雨遮）</span>
+                            <label><span class="visually-hidden">雨遮平方公尺</span><input id="rain-cover-area-sqm"
+                                    data-area-pair="rain-cover-area" data-area-unit="sqm" type="number" value="0"
+                                    readonly><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">雨遮坪</span><input id="rain-cover-area"
+                                    data-area-pair="rain-cover-area-sqm" data-area-unit="ping" type="number" value="0"
+                                    readonly><b>坪</b></label>
                         </div>
                         <div class="contract-form__row">
                             <span class="contract-form__label">二、共有部分持分面積約</span>
-                            <label><span class="visually-hidden">共有部分平方公尺</span><input id="clause-shared-area-sqm" data-area-pair="clause-shared-area" data-area-unit="sqm" type="number" min="0.0001" max="100000" step="0.0001"><b>平方公尺</b></label>
-                            <label><span class="visually-hidden">共有部分坪</span><input id="clause-shared-area" data-area-pair="clause-shared-area-sqm" data-area-unit="ping" data-category-sync="shared" type="number" min="0.0001" max="100000" step="0.0001"><b>坪</b></label>
+                            <label><span class="visually-hidden">共有部分平方公尺</span><input id="clause-shared-area-sqm"
+                                    data-area-pair="clause-shared-area" data-area-unit="sqm" type="number" min="0.0001"
+                                    max="100000" step="0.0001"><b>平方公尺</b></label>
+                            <label><span class="visually-hidden">共有部分坪</span><input id="clause-shared-area"
+                                    data-area-pair="clause-shared-area-sqm" data-area-unit="ping"
+                                    data-category-sync="shared" type="number" min="0.0001" max="100000"
+                                    step="0.0001"><b>坪</b></label>
                         </div>
                         <div class="contract-form__row contract-form__row--ratio">
                             <span class="contract-form__label">三、本約房屋主建物面積占本約房屋得登記總面積之比例</span>
-                            <label><span class="visually-hidden">主建物比例</span><input id="contract-main-ratio" type="number" min="0" max="100" step="0.01" placeholder="自動計算，可修改" title="依主建物契約面積除以房屋契約總面積自動計算，仍可手動修改"><b>%</b></label>
+                            <label><span class="visually-hidden">主建物比例</span><input id="contract-main-ratio"
+                                    type="number" min="0" max="100" step="0.01" placeholder="自動計算，可修改"
+                                    title="依主建物契約面積除以房屋契約總面積自動計算，仍可手動修改"><b>%</b></label>
                         </div>
                         <p class="contract-form__clause">四、前第一項及第二項所列面積與地政機關登記面積有誤時，雙方應以第六條面積誤差及價差找補約定互為找補。</p>
                     </div>
@@ -221,16 +256,30 @@
                                         type="number" min="0.0001" max="100000" step="0.0001"></td>
                                 <td data-label="實際登記（坪）"><input data-field="actualArea" aria-label="土地實際登記面積"
                                         type="number" min="0" max="100000" step="0.0001"></td>
-                                <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="土地契約分項價款（萬元）" type="number"
-                                        min="0" max="1000000" step="0.01"></td>
+                                <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="土地契約分項價款（萬元）"
+                                        type="number" min="0" max="1000000" step="0.01"></td>
                                 <td data-label="面積差額" data-output="difference">—</td>
-                                <td data-label="誤差率" data-output="rate">待核對</td>
-                                <td data-label="單價／坪" data-output="unitPrice">待核對</td>
+                                <td data-label="誤差率" data-output="rate">不適用房屋公式</td>
+                                <td data-label="單價／坪" data-output="unitPrice">不適用房屋公式</td>
                                 <td data-label="房屋找補" data-output="amount">不計入</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <section class="rain-cover-panel rain-cover-panel--confirmed" aria-labelledby="rain-cover-title">
+                    <div class="rain-cover-panel__heading">
+                        <div><span>RAIN COVER</span>
+                            <h3 id="rain-cover-title">本契約無雨遮</h3>
+                        </div>
+                        <strong>附屬建物無須扣除雨遮</strong>
+                    </div>
+                    <p>依已提供的契約，雨遮欄位不適用且無雨遮面積；附屬建物直接以輸入的契約面積、實際登記面積與分項價款計算。</p>
+                    <input id="rain-cover-treatment" type="hidden" value="none">
+                    <input id="contract-rain-cover-display" type="hidden" value="0">
+                    <input id="actual-rain-cover-area" type="hidden" value="0">
+                    <input id="accessory-price-basis" type="hidden" value="compensable">
+                    <div id="rain-cover-status" class="inline-note" aria-live="polite">已確認無雨遮；附屬建物可直接納入房屋找補試算。</div>
+                </section>
                 <p id="area-error" class="form-message" role="alert" aria-live="polite"></p>
                 <div class="declared-total-fields">
                     <div class="declared-total-fields__heading">
@@ -238,7 +287,8 @@
                         <p>契約面積同步第四條；實際登記面積請依權狀或謄本輸入，均不重複計入車位。</p>
                     </div>
                     <label class="mortgage-field"><span>契約面積</span><span class="mortgage-input-unit"><input
-                                id="registered-contract-total-area" type="number" readonly><b>坪</b></span><small>同步自第四條「本房屋面積共計」</small></label>
+                                id="registered-contract-total-area" type="number"
+                                readonly><b>坪</b></span><small>同步自第四條「本房屋面積共計」</small></label>
                     <label class="mortgage-field"><span>實際登記面積</span><span class="mortgage-input-unit"><input
                                 id="declared-total-area" type="number" min="0" max="100000"
                                 step="0.01"><b>坪</b></span><small>請依權狀或建物登記謄本輸入</small></label>
@@ -260,9 +310,39 @@
                             id="total-difference">—</strong><small id="total-area-formula">面積資料尚未齊全</small></article>
                     <article class="metric-card"><span id="total-rate-label">總面積誤差率</span><strong
                             id="total-rate">—</strong><small id="total-rate-note">優先採用第四條契約總面積</small></article>
-                    <article class="metric-card metric-card--accent"><span>未調整參考淨額</span><strong
-                            id="reference-net">—</strong><small>分項價差加總；尚未套用契約上限</small></article>
                 </div>
+                <div class="net-summary-grid" aria-label="價差完整度摘要">
+                    <article class="metric-card"><span>部分資料小計</span><strong id="partial-reference-net">—</strong><small
+                            id="partial-reference-note">尚無可計算分項</small></article>
+                    <article class="metric-card metric-card--accent"><span>完整未調整參考淨額</span><strong
+                            id="reference-net">—</strong><small id="reference-net-note">三個房屋分項資料齊全後顯示</small></article>
+                </div>
+                <section class="cap-scenario" aria-labelledby="cap-scenario-title">
+                    <div class="cap-scenario__heading">
+                        <div><span class="scenario-kicker">2% SCENARIO</span>
+                            <h3 id="cap-scenario-title">2% 找補上限假設情境</h3>
+                        </div>
+                        <strong id="cap-scenario-status">資料未齊</strong>
+                    </div>
+                    <div class="scenario-comparison">
+                        <div><span>未調整分項價差</span><strong id="scenario-unadjusted">—</strong></div>
+                        <div><span>假設套用後</span><strong id="scenario-capped">—</strong></div>
+                        <div><span>正式結算</span><strong>不能由此試算判定</strong><small>請向建商索取明細，並依完整契約確認</small></div>
+                    </div>
+                    <div id="scenario-bars" class="scenario-bars" aria-label="各分項未調整價差視覺化"></div>
+                    <div class="scenario-assumption"><strong>試算假設</strong>
+                        <p>僅為觀察影響：將每個面積增加分項各自限制在該分項契約面積的 2%，面積不足仍全額計入。契約第六條未明確規定上限應如何分配到各分項，因此這不是正式應退或應補金額。</p>
+                    </div>
+                    <div id="builder-inquiry-section" class="scenario-next-steps" hidden>
+                        <div class="scenario-next-steps__heading">
+                            <div><strong>可直接向建商詢問</strong><small>內容會隨上方輸入值自動更新；「尚未輸入」的資料請先補齊。</small></div>
+                            <button id="copy-builder-inquiry" class="mortgage-secondary-button"
+                                type="button">複製詢問內容</button>
+                        </div>
+                        <div id="builder-inquiry-text" class="builder-inquiry-text" aria-live="polite"></div>
+                        <p id="builder-inquiry-copy-status" class="builder-inquiry-copy-status" role="status"></p>
+                    </div>
+                </section>
                 <div id="warnings" class="warning-list" aria-live="polite"></div>
                 <div class="calculation-note"><strong>避免重複計價</strong>
                     <p>主建物及登記總面積的誤差率用於判讀契約門檻；退款／補款金額只依各房屋分項差額計入一次。不能以公設增加直接推定主建物縮小已獲補償，也不以總面積淨差乘平均成交單價。</p>
@@ -277,7 +357,7 @@
                 <div class="mortgage-section__heading"><span>04</span>
                     <div>
                         <h2 id="builder-title">建商結算核對</h2>
-                        <p>比較建商提出的淨額與未調整參考淨額，差額本身不是建商算錯的證據。</p>
+                        <p>僅在三個房屋分項資料齊全時，比較建商提出的淨額與完整未調整參考淨額；差額本身不是建商算錯的證據。</p>
                     </div>
                 </div>
                 <div>
@@ -287,9 +367,9 @@
                                 <option value="payment">買方補款給建商</option>
                             </select></label>
                         <label class="mortgage-field"><span>建商提出金額</span><span class="mortgage-input-unit"><input
-                                    id="builder-amount" type="number" min="0" max="1000000"
-                                    step="0.01"><b>萬元</b></span></label>
-                        <div class="builder-difference"><span>與未調整參考淨額差額</span><strong
+                                    id="builder-amount" type="number" min="0" max="10000000000" step="1"
+                                    inputmode="numeric"><b>元</b></span><small>請直接輸入建商結算明細上的新台幣金額</small></label>
+                        <div class="builder-difference"><span>與完整未調整參考淨額差額</span><strong
                                 id="builder-difference">—</strong><small>契約適用細節尚未確認時，此差額僅供提出問題。</small></div>
                     </div>
                     <label class="mortgage-field"><span>建商計算明細、計算基準、待詢問問題、文件日期</span><textarea id="builder-notes"
@@ -305,7 +385,7 @@
         </footer>
     </main>
 
-    <script type="module" src="js/adjustment.js"></script>
+    <script type="module" src="js/adjustment.js?v=7"></script>
 </body>
 
 </html>
