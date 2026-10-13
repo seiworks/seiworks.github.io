@@ -1143,6 +1143,16 @@ input[type="checkbox"] {
     font-weight: 700;
 }
 
+.contract-form__row--disabled {
+    color: var(--muted);
+    background: rgba(100, 119, 132, 0.06);
+}
+
+.contract-form__row--disabled input {
+    color: var(--muted);
+    background: rgba(100, 119, 132, 0.08);
+}
+
 .contract-form__row--indent-1 .contract-form__label {
     padding-left: 22px;
 }
@@ -1344,6 +1354,71 @@ input[type="checkbox"] {
     font-weight: 700;
 }
 
+.rain-cover-panel {
+    margin-top: 22px;
+    padding: 20px;
+    border: 1px solid rgba(3, 87, 158, 0.2);
+    border-radius: 16px;
+    background: var(--blue-soft);
+}
+
+.rain-cover-panel__heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.rain-cover-panel__heading span {
+    color: var(--blue);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.rain-cover-panel__heading h3,
+.rain-cover-panel > p {
+    margin: 0;
+}
+
+.rain-cover-panel__heading h3 {
+    margin-top: 3px;
+    font-size: 1rem;
+}
+
+.rain-cover-panel__heading > strong {
+    color: var(--blue-dark);
+    font-size: 0.75rem;
+}
+
+.rain-cover-panel > p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.65;
+}
+
+.rain-cover-fields {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1.35fr repeat(2, minmax(0, 0.7fr)) 1.35fr;
+    align-items: end;
+    gap: 14px;
+}
+
+.rain-cover-fields small {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1.5;
+}
+
+.rain-cover-panel .inline-note {
+    margin-top: 14px;
+    background: rgba(255, 255, 255, 0.78);
+}
+
 .field-error,
 .form-message {
     min-height: 1.25em;
@@ -1408,7 +1483,13 @@ input[type="checkbox"] {
 
 .calculation-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.net-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
 }
 
@@ -1444,6 +1525,197 @@ input[type="checkbox"] {
 .metric-card--accent {
     border-color: var(--blue);
     background: var(--blue-soft);
+}
+
+.cap-scenario {
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--paper), var(--blue-soft));
+}
+
+.cap-scenario__heading,
+.scenario-comparison,
+.scenario-bar-row {
+    display: grid;
+    align-items: center;
+}
+
+.cap-scenario__heading {
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+}
+
+.cap-scenario__heading h3,
+.scenario-assumption p,
+.scenario-bars p {
+    margin: 0;
+}
+
+.scenario-kicker {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--blue);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.cap-scenario__heading h3 {
+    font-size: 1rem;
+}
+
+.cap-scenario__heading > strong {
+    color: var(--blue-dark);
+    font-size: 0.75rem;
+}
+
+.scenario-comparison {
+    margin-top: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-block: 1px solid var(--line);
+}
+
+.scenario-comparison > div {
+    padding: 14px;
+}
+
+.scenario-comparison > div + div {
+    border-left: 1px solid var(--line);
+}
+
+.scenario-comparison span,
+.scenario-comparison strong,
+.scenario-comparison small {
+    display: block;
+}
+
+.scenario-comparison span {
+    color: var(--muted);
+    font-size: 0.7rem;
+}
+
+.scenario-comparison strong {
+    margin-top: 5px;
+    font-size: 0.95rem;
+}
+
+.scenario-comparison small {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 0.66rem;
+    line-height: 1.5;
+}
+
+.scenario-bars {
+    margin-top: 16px;
+}
+
+.scenario-bar-row {
+    grid-template-columns: 72px minmax(80px, 1fr) minmax(120px, auto);
+    gap: 12px;
+    min-height: 30px;
+    font-size: 0.72rem;
+}
+
+.scenario-bar-row > span {
+    color: var(--muted);
+}
+
+.scenario-bar-row > strong {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.scenario-bar-track {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(100, 119, 132, 0.15);
+}
+
+.scenario-bar {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--muted);
+}
+
+.scenario-bar--negative {
+    background: var(--success);
+}
+
+.scenario-bar--positive {
+    background: var(--danger);
+}
+
+.scenario-assumption {
+    margin-top: 16px;
+    padding-top: 14px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    border-top: 1px dashed var(--line);
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.65;
+}
+
+.scenario-assumption strong {
+    color: var(--ink);
+}
+
+.scenario-next-steps {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
+.scenario-next-steps__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.scenario-next-steps__heading strong,
+.scenario-next-steps__heading small {
+    display: block;
+}
+
+.scenario-next-steps__heading strong {
+    font-size: 0.82rem;
+}
+
+.scenario-next-steps__heading small {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 0.68rem;
+}
+
+.scenario-next-steps__heading button {
+    flex: 0 0 auto;
+    padding: 9px 14px;
+}
+
+.builder-inquiry-text {
+    margin-top: 14px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 0.74rem;
+    line-height: 1.75;
+    white-space: pre-line;
+}
+
+.builder-inquiry-copy-status {
+    min-height: 1.4em;
+    margin: 7px 0 0;
+    color: var(--blue-dark);
+    font-size: 0.68rem;
+    text-align: right;
 }
 
 .warning-list {
@@ -1634,11 +1906,16 @@ input[type="checkbox"] {
 
 @media (max-width: 900px) {
     .adjustment-basic-fields,
-    .calculation-grid {
+    .calculation-grid,
+    .net-summary-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .builder-fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .rain-cover-fields {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -1681,8 +1958,28 @@ input[type="checkbox"] {
 
     .adjustment-basic-fields,
     .calculation-grid,
+    .net-summary-grid,
     .builder-fields,
     .document-checklist {
+        grid-template-columns: 1fr;
+    }
+
+    .adjustment-basic-fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 10px;
+    }
+
+    .rain-cover-panel {
+        padding: 16px;
+    }
+
+    .rain-cover-panel__heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .rain-cover-fields {
         grid-template-columns: 1fr;
     }
 
@@ -1710,6 +2007,45 @@ input[type="checkbox"] {
 
     .adjustment-footer {
         flex-direction: column;
+    }
+
+    .scenario-comparison {
+        grid-template-columns: 1fr;
+    }
+
+    .cap-scenario {
+        padding: 16px;
+    }
+
+    .cap-scenario__heading {
+        grid-template-columns: 1fr;
+        gap: 7px;
+    }
+
+    .scenario-comparison > div + div {
+        border-top: 1px solid var(--line);
+        border-left: 0;
+    }
+
+    .scenario-bar-row {
+        grid-template-columns: 62px minmax(60px, 1fr);
+    }
+
+    .scenario-bar-row > strong {
+        grid-column: 2;
+    }
+
+    .scenario-assumption {
+        grid-template-columns: 1fr;
+    }
+
+    .scenario-next-steps__heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .scenario-next-steps__heading button {
+        width: 100%;
     }
 }
 
@@ -1932,7 +2268,7 @@ input[type="checkbox"] {
     }
 
     .adjustment-page .clause4-inputs {
-        padding: 16px;
+        padding: 12px;
     }
 
     .adjustment-page .clause4-fields {
@@ -1941,9 +2277,10 @@ input[type="checkbox"] {
 
     .adjustment-page .contract-form__row,
     .adjustment-page .contract-form__row--ratio {
-        padding: 14px;
+        padding: 13px 12px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 9px;
+        column-gap: 12px;
+        row-gap: 10px;
     }
 
     .adjustment-page .contract-form__label,
@@ -1954,8 +2291,22 @@ input[type="checkbox"] {
     }
 
     .adjustment-page .contract-form__row input {
+        grid-column: 1;
         height: 46px;
+        padding-inline: 10px;
         font-size: 16px;
+    }
+
+    .adjustment-page .contract-form__row label {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 6px;
+    }
+
+    .adjustment-page .contract-form__row label b {
+        order: -1;
+        min-height: 1.2em;
+        font-size: 0.72rem;
+        text-align: left;
     }
 
     .adjustment-page .contract-form__row--ratio label {

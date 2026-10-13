@@ -26,7 +26,8 @@ calcloan/
 ├── js/
 │   ├── calculator.js
 │   ├── general-calculator.js
-│   └── adjustment.js
+│   ├── adjustment.js
+│   └── adjustment.test.mjs
 └── img/
     ├── favicon.svg
     └── logo_blue.svg
@@ -43,6 +44,7 @@ calcloan/
 | js/calculator.js | 組合房貸拆分、試算、排序、動態方案與畫面更新 |
 | js/general-calculator.js | 一般房貸試算、排序、動態方案與畫面更新 |
 | js/adjustment.js | 找補精算、驗證、契約警示、localStorage 自動暫存與 JSON 備份還原 |
+| js/adjustment.test.mjs | 找補數學、3% 邊界、2% 假設情境、精度與 JSON 往返測試 |
 | img/ | CalcLoan 自己使用的 favicon 與 Logo |
 
 ## 頁面切換
