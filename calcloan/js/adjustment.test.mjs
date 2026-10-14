@@ -6,11 +6,14 @@ import {
     calculateCategory,
     calculateTotals,
     calculateTwoPercentScenario,
+    assessInputState,
     buildBuilderInquiry,
     convertArea,
     deserializeAdjustmentData,
     exceedsThreePercent,
     prepareCompensableCategories,
+    parseOptionalNumber,
+    restoreAreaPairValues,
     serializeAdjustmentData
 } from './adjustment.js';
 
@@ -28,12 +31,37 @@ function houseCategories(overrides = {}) {
     };
 }
 
+test('空白與純空白數字輸入都視為未填寫', () => {
+    assert.equal(parseOptionalNumber(''), null);
+    assert.equal(parseOptionalNumber('   '), null);
+    assert.equal(parseOptionalNumber('\t\n'), null);
+    assert.equal(parseOptionalNumber(' 12.5 '), 12.5);
+});
+
+test('JSON 面積配對以原始值為準，僅在缺值時換算', () => {
+    const originals = restoreAreaPairValues(32.12345678, 106.19384721);
+    assert.deepEqual(originals, { ping: 32.12345678, squareMetres: 106.19384721 });
+
+    const fromPing = restoreAreaPairValues(32.12345678, null);
+    assert.equal(fromPing.ping, 32.12345678);
+    assert.ok(Math.abs(fromPing.squareMetres - convertArea(32.12345678, 'ping')) < 1e-12);
+
+    const fromSquareMetres = restoreAreaPairValues(null, 106.19384721);
+    assert.equal(fromSquareMetres.squareMetres, 106.19384721);
+    assert.ok(Math.abs(fromSquareMetres.ping - convertArea(106.19384721, 'sqm')) < 1e-12);
+});
+
 test('面積減少：20 坪對 19.8 坪為 -1% 與 -8 萬元', () => {
     const result = calculateCategory({ contractArea: 20, actualArea: 19.8, price: 8000000 });
     assert.ok(Math.abs(result.difference + 0.2) < 1e-12);
     assert.ok(Math.abs(result.rate + 1) < 1e-12);
     assert.equal(result.unitPrice, 400000);
     assert.equal(result.amount, -80000);
+});
+
+test('需求案例：25 坪短少至 24.5 坪，單價 32 萬為 -16 萬元', () => {
+    const result = calculateCategory({ contractArea: 25, actualArea: 24.5, price: 8000000 });
+    assert.equal(result.amount, -160000);
 });
 
 test('面積增加：保留未調整價差並可產生 2% 假設情境', () => {
@@ -179,6 +207,27 @@ test('3% 解約門檻嚴格採大於，正負 3% 都不觸發', () => {
     assert.equal(exceedsThreePercent(plusThree.rate), false);
     assert.equal(exceedsThreePercent(beyond.rate), true);
     assert.equal(exceedsThreePercent(3.0000000001), true);
+    assert.equal(exceedsThreePercent(calculateCategory({ contractArea: 25, actualArea: 25.75, price: 8000000 }).rate), false);
+    assert.equal(exceedsThreePercent(calculateCategory({ contractArea: 25, actualArea: 25.750025, price: 8000000 }).rate), true);
+    assert.equal(exceedsThreePercent(calculateCategory({ contractArea: 25, actualArea: 24.249975, price: 8000000 }).rate), true);
+});
+
+test('總面積重大不一致或車位範圍未確認會阻止完整試算', () => {
+    const categories = houseCategories();
+    const mismatchTotals = calculateTotals(categories, null, 33, 32);
+    const mismatch = assessInputState({ basic: { totalPrice: 10000000, parkingPrice: 2000000, contractTotalArea: 33, declaredTotalArea: 32, parkingAreaScope: 'excluded', contractMainRatio: null, squareMetres: {} }, categories }, mismatchTotals);
+    assert.match(mismatch.blockingErrors.join(' '), /契約房屋總面積與三分項加總/);
+
+    const consistentTotals = calculateTotals(categories, null, 32, 32);
+    const parkingPending = assessInputState({ basic: { totalPrice: 10000000, parkingPrice: 2000000, contractTotalArea: 32, declaredTotalArea: 32, parkingAreaScope: 'pending', contractMainRatio: null, squareMetres: {} }, categories }, consistentTotals);
+    assert.match(parkingPending.blockingErrors.join(' '), /車位面積/);
+});
+
+test('缺少任一房屋分項價款會列為阻止性錯誤', () => {
+    const categories = houseCategories({ shared: { contractArea: 10, actualArea: 10, price: null } });
+    const totals = calculateTotals(categories, null, 32, 32);
+    const result = assessInputState({ basic: { totalPrice: null, parkingPrice: null, contractTotalArea: 32, declaredTotalArea: 32, parkingAreaScope: 'excluded', contractMainRatio: null, squareMetres: {} }, categories }, totals);
+    assert.match(result.blockingErrors.join(' '), /共有部分契約分項價款不可空白/);
 });
 
 test('平方公尺與坪數換算不在輸入階段限制為兩位小數', () => {
@@ -204,6 +253,7 @@ test('JSON 匯出再匯入完整保留欄位、空值與手動面積精度', () 
             rainCoverTreatment: 'included',
             accessoryPriceBasis: 'compensable',
             contractMainRatio: 60.71,
+            contractMainRatioSource: 'manual',
             squareMetres: {
                 'contract-total-area-sqm': 106.19384721,
                 'exclusive-area-sqm': 76.00000001,
@@ -214,6 +264,7 @@ test('JSON 匯出再匯入完整保留欄位、空值與手動面積精度', () 
                 'clause-shared-area-sqm': 30.1938472
             },
             declaredTotalArea: null,
+            parkingAreaScope: 'pending',
             suspectedChange: false,
             changeNotes: '',
             builderDirection: 'refund',

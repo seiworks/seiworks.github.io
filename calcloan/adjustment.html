@@ -216,7 +216,7 @@
                                 <td data-label="契約面積（坪）"><input data-field="contractArea" aria-label="主建物契約面積"
                                         type="number" min="0.0001" max="100000" step="0.0001" readonly></td>
                                 <td data-label="實際登記（坪）"><input data-field="actualArea" aria-label="主建物實際登記面積"
-                                        type="number" min="0" max="100000" step="0.0001"></td>
+                                        type="number" min="0" max="100000" step="0.000001"></td>
                                 <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="主建物契約分項價款（萬元）"
                                         type="number" min="0" max="1000000" step="0.01"></td>
                                 <td data-label="面積差額" data-output="difference">—</td>
@@ -229,7 +229,7 @@
                                 <td data-label="契約面積（坪）"><input data-field="contractArea" aria-label="附屬建物契約面積"
                                         type="number" min="0.0001" max="100000" step="0.0001" readonly></td>
                                 <td data-label="實際登記（坪）"><input data-field="actualArea" aria-label="附屬建物實際登記面積"
-                                        type="number" min="0" max="100000" step="0.0001"></td>
+                                        type="number" min="0" max="100000" step="0.000001"></td>
                                 <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="附屬建物契約分項價款（萬元）"
                                         type="number" min="0" max="1000000" step="0.01"></td>
                                 <td data-label="面積差額" data-output="difference">—</td>
@@ -242,7 +242,7 @@
                                 <td data-label="契約面積（坪）"><input data-field="contractArea" aria-label="共有部分契約面積"
                                         type="number" min="0.0001" max="100000" step="0.0001" readonly></td>
                                 <td data-label="實際登記（坪）"><input data-field="actualArea" aria-label="共有部分實際登記面積"
-                                        type="number" min="0" max="100000" step="0.0001"></td>
+                                        type="number" min="0" max="100000" step="0.000001"></td>
                                 <td data-label="契約分項價款（萬元）"><input data-field="price" aria-label="共有部分契約分項價款（萬元）"
                                         type="number" min="0" max="1000000" step="0.01"></td>
                                 <td data-label="面積差額" data-output="difference">—</td>
@@ -291,7 +291,12 @@
                                 readonly><b>坪</b></span><small>同步自第四條「本房屋面積共計」</small></label>
                     <label class="mortgage-field"><span>實際登記面積</span><span class="mortgage-input-unit"><input
                                 id="declared-total-area" type="number" min="0" max="100000"
-                                step="0.01"><b>坪</b></span><small>請依權狀或建物登記謄本輸入</small></label>
+                                step="0.000001"><b>坪</b></span><small>請依權狀或建物登記謄本輸入</small></label>
+                    <label class="mortgage-field"><span>車位面積計入範圍</span><select id="parking-area-scope">
+                            <option value="pending">尚未確認</option>
+                            <option value="excluded">已確認：權狀總面積與共有部分皆不含車位</option>
+                            <option value="included">不一致：權狀總面積或共有部分含車位</option>
+                        </select><small>本工具不會自動扣除車位面積；請先依權狀、謄本及契約確認比較範圍。</small></label>
                     <div id="total-consistency" class="inline-note">尚未輸入可核對的總面積。</div>
                 </div>
             </section>
@@ -320,18 +325,18 @@
                 <section class="cap-scenario" aria-labelledby="cap-scenario-title">
                     <div class="cap-scenario__heading">
                         <div><span class="scenario-kicker">2% SCENARIO</span>
-                            <h3 id="cap-scenario-title">2% 找補上限假設情境</h3>
+                            <h3 id="cap-scenario-title">各分項 2% 上限假設情境</h3>
                         </div>
                         <strong id="cap-scenario-status">資料未齊</strong>
                     </div>
                     <div class="scenario-comparison">
-                        <div><span>未調整分項價差</span><strong id="scenario-unadjusted">—</strong></div>
-                        <div><span>假設套用後</span><strong id="scenario-capped">—</strong></div>
-                        <div><span>正式結算</span><strong>不能由此試算判定</strong><small>請向建商索取明細，並依完整契約確認</small></div>
+                        <div><span>未調整參考淨額</span><strong id="scenario-unadjusted">—</strong></div>
+                        <div><span>各分項 2% 上限情境淨額</span><strong id="scenario-capped">—</strong></div>
+                        <div><span>建商正式結算金額</span><strong>不能由此試算判定</strong><small>請向建商索取明細，並依完整契約確認</small></div>
                     </div>
                     <div id="scenario-bars" class="scenario-bars" aria-label="各分項未調整價差視覺化"></div>
                     <div class="scenario-assumption"><strong>試算假設</strong>
-                        <p>僅為觀察影響：將每個面積增加分項各自限制在該分項契約面積的 2%，面積不足仍全額計入。契約第六條未明確規定上限應如何分配到各分項，因此這不是正式應退或應補金額。</p>
+                        <p>「各分項獨立適用 2% 上限」只是觀察影響的假設情境，不是已確認的正式結算規則。每個增加分項暫各自限制在該分項契約面積的 2%，減少分項保留原始負號並全額計入；增減混合時，上限分配方式仍須依契約及建商正式明細確認。</p>
                     </div>
                     <div id="builder-inquiry-section" class="scenario-next-steps" hidden>
                         <div class="scenario-next-steps__heading">
@@ -357,7 +362,7 @@
                 <div class="mortgage-section__heading"><span>04</span>
                     <div>
                         <h2 id="builder-title">建商結算核對</h2>
-                        <p>僅在三個房屋分項資料齊全時，比較建商提出的淨額與完整未調整參考淨額；差額本身不是建商算錯的證據。</p>
+                        <p>僅在三個房屋分項資料齊全且通過驗證時，比較建商提出的淨額與未套用 2% 上限的完整參考淨額；不會拿建商金額與 2% 假設情境比較，差額本身也不是建商算錯的證據。</p>
                     </div>
                 </div>
                 <div>
@@ -369,8 +374,8 @@
                         <label class="mortgage-field"><span>建商提出金額</span><span class="mortgage-input-unit"><input
                                     id="builder-amount" type="number" min="0" max="10000000000" step="1"
                                     inputmode="numeric"><b>元</b></span><small>請直接輸入建商結算明細上的新台幣金額</small></label>
-                        <div class="builder-difference"><span>與完整未調整參考淨額差額</span><strong
-                                id="builder-difference">—</strong><small>契約適用細節尚未確認時，此差額僅供提出問題。</small></div>
+                        <div class="builder-difference"><span>建商金額與未調整參考淨額差異</span><strong
+                                id="builder-difference">—</strong><small>比較基準未套用 2% 上限，不是法定應付款差異；僅供提出問題。</small></div>
                     </div>
                     <label class="mortgage-field"><span>建商計算明細、計算基準、待詢問問題、文件日期</span><textarea id="builder-notes"
                             rows="5" maxlength="5000" placeholder="例如：請建商提供三類分項單價與 2% 上限套用方式"></textarea></label>

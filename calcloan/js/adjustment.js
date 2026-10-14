@@ -35,8 +35,10 @@ const tenThousandsFormatter = new Intl.NumberFormat('zh-TW', {
 });
 
 export function parseOptionalNumber(value) {
-    if (value === '' || value === null || value === undefined) return null;
-    const number = Number(String(value).trim().replace(',', '.'));
+    if (value === null || value === undefined) return null;
+    const normalized = String(value).trim();
+    if (normalized === '') return null;
+    const number = Number(normalized.replace(',', '.'));
     return Number.isFinite(number) ? number : null;
 }
 
@@ -52,6 +54,16 @@ export function twdToTenThousands(value) {
 export function convertArea(value, fromUnit) {
     if (!Number.isFinite(value)) return null;
     return fromUnit === 'sqm' ? value / SQM_PER_PING : value * SQM_PER_PING;
+}
+
+export function restoreAreaPairValues(pingValue, squareMetresValue) {
+    const ping = Number.isFinite(pingValue)
+        ? pingValue
+        : Number.isFinite(squareMetresValue) ? convertArea(squareMetresValue, 'sqm') : null;
+    const squareMetres = Number.isFinite(squareMetresValue)
+        ? squareMetresValue
+        : Number.isFinite(pingValue) ? convertArea(pingValue, 'ping') : null;
+    return { ping, squareMetres };
 }
 
 function formatAreaInput(value) {
@@ -181,8 +193,61 @@ export function calculateTwoPercentScenario(categories, results) {
 
 export function exceedsThreePercent(rate) {
     if (!Number.isFinite(rate)) return false;
-    const normalizedRate = Math.round(Math.abs(rate) * 10000000000) / 10000000000;
-    return normalizedRate > 3;
+    const floatingPointTolerance = Number.EPSILON * Math.max(Math.abs(rate), 3) * 16;
+    return Math.abs(rate) - 3 > floatingPointTolerance;
+}
+
+export function assessInputState(data, totals) {
+    const blockingErrors = [];
+    const warnings = [];
+    const info = [];
+    const labels = { main: '主建物', accessory: '附屬建物', shared: '共有部分' };
+    const add = (list, message) => { if (!list.includes(message)) list.push(message); };
+
+    if (Number.isFinite(data.basic.totalPrice) && Number.isFinite(data.basic.parkingPrice)
+        && data.basic.parkingPrice > data.basic.totalPrice) add(blockingErrors, '車位價款不可大於成交總價。');
+    HOUSE_CATEGORIES.forEach((category) => {
+        const row = data.categories[category];
+        if (!Number.isFinite(row.contractArea) || row.contractArea <= 0) add(blockingErrors, `${labels[category]}契約面積須大於 0。`);
+        if (!Number.isFinite(row.actualArea) || row.actualArea < 0) add(blockingErrors, `${labels[category]}實際登記面積不可空白或為負。`);
+        if (!Number.isFinite(row.price) || row.price < 0) add(blockingErrors, `${labels[category]}契約分項價款不可空白或為負。`);
+    });
+    if (!Number.isFinite(data.basic.contractTotalArea) || data.basic.contractTotalArea <= 0) add(blockingErrors, '第四條契約房屋總面積須大於 0。');
+    if (!Number.isFinite(data.basic.declaredTotalArea) || data.basic.declaredTotalArea < 0) add(blockingErrors, '實際登記房屋總面積不可空白或為負。');
+    if (Number.isFinite(data.basic.contractTotalArea) && totals.contractBreakdownComplete) {
+        const difference = totals.calculatedContractTotal - data.basic.contractTotalArea;
+        if (Math.abs(difference) > AREA_ROUNDING_TOLERANCE) add(blockingErrors, `契約房屋總面積與三分項加總相差 ${formatArea(difference, true)}，超出合理四捨五入尾差。`);
+        else info.push('契約房屋總面積與契約三分項加總一致（含合理尾差）。');
+    }
+    if (Number.isFinite(data.basic.declaredTotalArea) && totals.actualBreakdownComplete) {
+        const difference = data.basic.declaredTotalArea - totals.calculatedActualTotal;
+        if (Math.abs(difference) > AREA_ROUNDING_TOLERANCE) add(blockingErrors, `實際登記房屋總面積與三分項加總相差 ${formatArea(difference, true)}，超出合理四捨五入尾差。`);
+        else info.push('實際登記房屋總面積與實際三分項加總一致（含合理尾差）。');
+    }
+    if (data.basic.parkingAreaScope !== 'excluded') {
+        add(blockingErrors, data.basic.parkingAreaScope === 'included'
+            ? '權狀總面積或共有部分含車位，與契約房屋面積比較範圍不一致；請改填不含車位的可比較數值。'
+            : '車位面積是否計入權狀總面積或共有部分尚未釐清，房屋總面積不可比較。');
+    } else info.push('已確認契約與實際登記面積採相同比較範圍，且不含車位。');
+    if (Number.isFinite(data.basic.contractMainRatio) && Number.isFinite(data.basic.contractTotalArea)
+        && data.basic.contractTotalArea > 0 && Number.isFinite(data.categories.main.contractArea)) {
+        const calculated = data.categories.main.contractArea / data.basic.contractTotalArea * 100;
+        if (Math.abs(calculated - data.basic.contractMainRatio) > RATIO_ROUNDING_TOLERANCE) warnings.push(`契約記載主建物比例為 ${data.basic.contractMainRatio}%，依面積換算為 ${calculated.toFixed(2)}%，請核對原始契約。`);
+    }
+    const areaPairs = [
+        ['contract-total-area-sqm', data.basic.contractTotalArea, '契約房屋總面積'],
+        ['exclusive-area-sqm', data.basic.exclusiveArea, '專有部分'],
+        ['clause-main-area-sqm', data.categories.main.contractArea, '主建物'],
+        ['clause-accessory-area-sqm', data.categories.accessory.contractArea, '附屬建物'],
+        ['clause-shared-area-sqm', data.categories.shared.contractArea, '共有部分']
+    ];
+    areaPairs.forEach(([sqmId, ping, label]) => {
+        const sqm = data.basic.squareMetres?.[sqmId];
+        if (Number.isFinite(sqm) && Number.isFinite(ping) && Math.abs(convertArea(sqm, 'sqm') - ping) > AREA_ROUNDING_TOLERANCE) {
+            warnings.push(`${label}的平方公尺與坪數換算不一致，已保留原始輸入，請核對契約記載值。`);
+        }
+    });
+    return { blockingErrors, warnings, info };
 }
 
 function formatArea(value, signed = false) {
@@ -263,6 +328,8 @@ export function validateData(data) {
     }
     if (data.basic.rainCoverTreatment !== undefined && !['pending', 'included', 'excluded', 'none'].includes(data.basic.rainCoverTreatment)) return '雨遮面積處理格式無效。';
     if (data.basic.accessoryPriceBasis !== undefined && !['pending', 'compensable'].includes(data.basic.accessoryPriceBasis)) return '附屬建物價款基準格式無效。';
+    if (data.basic.parkingAreaScope !== undefined && !['pending', 'excluded', 'included'].includes(data.basic.parkingAreaScope)) return 'parkingAreaScope 的格式無效。';
+    if (data.basic.contractMainRatioSource !== undefined && !['auto', 'manual'].includes(data.basic.contractMainRatioSource)) return 'contractMainRatioSource 的格式無效。';
     if (data.basic.contractMainRatio !== undefined && !valueInRange(data.basic.contractMainRatio, 100)) return 'contractMainRatio 的數值無效。';
     if (data.basic.squareMetres !== undefined) {
         if (!data.basic.squareMetres || typeof data.basic.squareMetres !== 'object' || Array.isArray(data.basic.squareMetres)) {
@@ -342,16 +409,15 @@ if (typeof document !== 'undefined') {
         syncAreaPair(clauseInput);
     }
 
-    function syncAllContractUnits() {
-        document.querySelectorAll('[data-area-unit="ping"]').forEach((input) => syncAreaPair(input));
-    }
-
     function updateMainRatio() {
+        const ratioInput = element('contract-main-ratio');
+        if (ratioInput.dataset.valueSource === 'manual') return;
         const mainArea = readInput('clause-main-area');
         const totalArea = readInput('contract-total-area');
-        element('contract-main-ratio').value = Number.isFinite(mainArea) && Number.isFinite(totalArea) && totalArea > 0
+        ratioInput.value = Number.isFinite(mainArea) && Number.isFinite(totalArea) && totalArea > 0
             ? (mainArea / totalArea * 100).toFixed(2)
             : '';
+        ratioInput.dataset.valueSource = 'auto';
     }
 
     function collectData() {
@@ -379,8 +445,10 @@ if (typeof document !== 'undefined') {
                 rainCoverTreatment: 'none',
                 accessoryPriceBasis: 'compensable',
                 contractMainRatio: readInput('contract-main-ratio'),
+                contractMainRatioSource: element('contract-main-ratio').dataset.valueSource || 'auto',
                 squareMetres: Object.fromEntries(CONTRACT_SQM_INPUT_IDS.map((id) => [id, readInput(id)])),
                 declaredTotalArea: readInput('declared-total-area'),
+                parkingAreaScope: element('parking-area-scope').value,
                 suspectedChange: element('suspected-change').checked,
                 changeNotes: element('change-notes').value,
                 builderDirection: element('builder-direction').value,
@@ -393,7 +461,7 @@ if (typeof document !== 'undefined') {
 
     function applyData(data) {
         const { basic } = data;
-        ['parkingArea', 'contractTotalArea', 'exclusiveArea', 'balconyArea', 'rainCoverArea', 'actualRainCoverArea', 'contractMainRatio', 'declaredTotalArea'].forEach((key) => {
+        ['parkingArea', 'actualRainCoverArea', 'contractMainRatio', 'declaredTotalArea'].forEach((key) => {
             const id = key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
             writeInput(id, basic[key]);
         });
@@ -411,6 +479,8 @@ if (typeof document !== 'undefined') {
         element('change-notes').value = basic.changeNotes || '';
         element('builder-direction').value = basic.builderDirection === 'payment' ? 'payment' : 'refund';
         element('builder-notes').value = basic.builderNotes || '';
+        element('parking-area-scope').value = ['excluded', 'included'].includes(basic.parkingAreaScope) ? basic.parkingAreaScope : 'pending';
+        element('contract-main-ratio').dataset.valueSource = basic.contractMainRatioSource === 'manual' ? 'manual' : 'auto';
         rows.forEach((row) => {
             const source = data.categories[row.dataset.category];
             ['contractArea', 'actualArea', 'price'].forEach((field) => {
@@ -418,43 +488,51 @@ if (typeof document !== 'undefined') {
                 input.value = field === 'price' && Number.isFinite(source[field]) ? String(source[field] / 10000) : source[field] ?? '';
             });
         });
-        rows.forEach((row) => syncClauseFromCategory(row.querySelector('[data-field="contractArea"]')));
-        syncAllContractUnits();
-        if (basic.squareMetres) {
-            CONTRACT_SQM_INPUT_IDS.forEach((id) => {
-                if (id === 'rain-cover-area-sqm') return;
-                if (Number.isFinite(basic.squareMetres[id])) writeInput(id, basic.squareMetres[id]);
-            });
+        const storedSquareMetres = basic.squareMetres || {};
+        const areaPairs = [
+            ['contract-total-area', 'contract-total-area-sqm', basic.contractTotalArea],
+            ['exclusive-area', 'exclusive-area-sqm', basic.exclusiveArea],
+            ['clause-main-area', 'clause-main-area-sqm', data.categories.main.contractArea],
+            ['clause-accessory-area', 'clause-accessory-area-sqm', data.categories.accessory.contractArea],
+            ['balcony-area', 'balcony-area-sqm', basic.balconyArea],
+            ['clause-shared-area', 'clause-shared-area-sqm', data.categories.shared.contractArea]
+        ];
+        areaPairs.forEach(([pingId, sqmId, pingValue]) => {
+            const restored = restoreAreaPairValues(pingValue, storedSquareMetres[sqmId]);
+            writeInput(pingId, restored.ping);
+            writeInput(sqmId, restored.squareMetres);
+        });
+        if (!Number.isFinite(basic.contractMainRatio)) {
+            element('contract-main-ratio').dataset.valueSource = 'auto';
+            updateMainRatio();
         }
-        if (!Number.isFinite(basic.contractMainRatio)) updateMainRatio();
         render();
     }
 
-    function validateInputs(data) {
-        const errors = [];
+    function validateInputs(data, totals) {
         document.querySelectorAll('.field-error').forEach((node) => { node.textContent = ''; });
-        if (!valueInRange(data.basic.totalPrice, MAX_MONEY)) errors.push('成交總價必須是 0 以上的有效金額。');
-        if (!valueInRange(data.basic.parkingPrice, MAX_MONEY)) errors.push('車位價款必須是 0 以上的有效金額。');
+        const result = assessInputState(data, totals);
+        if (!valueInRange(data.basic.totalPrice, MAX_MONEY)) result.blockingErrors.push('成交總價必須是 0 以上的有效金額。');
+        if (!valueInRange(data.basic.parkingPrice, MAX_MONEY)) result.blockingErrors.push('車位價款必須是 0 以上的有效金額。');
         if (Number.isFinite(data.basic.totalPrice) && Number.isFinite(data.basic.parkingPrice) && data.basic.parkingPrice > data.basic.totalPrice) {
             document.querySelector('[data-error-for="parking-price"]').textContent = '車位價款不可大於成交總價。';
-            errors.push('車位價款不可大於成交總價。');
         }
-        for (const category of CATEGORIES) {
+        for (const category of ['land']) {
             const values = data.categories[category];
-            if (!valueInRange(values.contractArea, MAX_AREA, false)) errors.push(`${category} 契約面積須大於 0。`);
-            if (!valueInRange(values.actualArea, MAX_AREA)) errors.push(`${category} 實際面積不可為負。`);
-            if (!valueInRange(values.price, MAX_MONEY)) errors.push(`${category} 價款不可為負。`);
-            if (values.actualArea === 0) errors.push(`${category} 實際面積為 0，請核對登記資料。`);
+            if (!valueInRange(values.contractArea, MAX_AREA, false)) result.blockingErrors.push(`${category} 契約面積須大於 0。`);
+            if (!valueInRange(values.actualArea, MAX_AREA)) result.blockingErrors.push(`${category} 實際面積不可為負。`);
+            if (!valueInRange(values.price, MAX_MONEY)) result.blockingErrors.push(`${category} 價款不可為負。`);
         }
-        for (const [key, label] of [['contractTotalArea', '第四條房屋總面積'], ['exclusiveArea', '專有部分面積']]) {
-            if (!valueInRange(data.basic[key], MAX_AREA, false)) errors.push(`${label}須大於 0。`);
+        for (const [key, label] of [['exclusiveArea', '專有部分面積']]) {
+            if (!valueInRange(data.basic[key], MAX_AREA, false)) result.blockingErrors.push(`${label}須大於 0。`);
         }
         for (const [key, label] of [['balconyArea', '陽臺面積'], ['rainCoverArea', '雨遮面積']]) {
-            if (!valueInRange(data.basic[key], MAX_AREA)) errors.push(`${label}不可為負。`);
+            if (!valueInRange(data.basic[key], MAX_AREA)) result.blockingErrors.push(`${label}不可為負。`);
         }
-        if (!valueInRange(data.basic.actualRainCoverArea, MAX_AREA)) errors.push('實際登記雨遮面積不可為負。');
-        if (!valueInRange(data.basic.contractMainRatio, 100)) errors.push('主建物比例須介於 0% 至 100%。');
-        return [...new Set(errors)];
+        if (!valueInRange(data.basic.actualRainCoverArea, MAX_AREA)) result.blockingErrors.push('實際登記雨遮面積不可為負。');
+        if (!valueInRange(data.basic.contractMainRatio, 100)) result.blockingErrors.push('主建物比例須介於 0% 至 100%。');
+        result.blockingErrors = [...new Set(result.blockingErrors)];
+        return result;
     }
 
     function setOutput(row, name, text, numericValue = null) {
@@ -464,14 +542,14 @@ if (typeof document !== 'undefined') {
         output.classList.toggle('is-positive', Number.isFinite(numericValue) && numericValue > 0);
     }
 
-    function buildWarnings(data, totals) {
+    function buildWarnings(data, totals, allowThresholdConclusion = true) {
         const warnings = [];
         const mainRate = totals.results.main.rate;
         const totalRate = totals.totalRate;
         const comparableRates = [mainRate, totalRate].filter(Number.isFinite);
         if (comparableRates.some((rate) => rate < 0)) warnings.push(['success', '契約第六條：主建物或房屋登記總面積不足時，不足部分應全部找補；金額仍依房屋分項單價計算一次。']);
         if (comparableRates.some((rate) => rate > 0)) warnings.push(['', '契約第六條：主建物或登記總面積增加時，買方找補以 2% 為限；上限如何落實於分項結算仍須核對完整契約與適用規範。']);
-        if (comparableRates.some(exceedsThreePercent)) warnings.push(['alert', '主建物或房屋登記總面積誤差絕對值大於 3%，可能符合第六條第三項解除契約條件，請進一步確認。']);
+        if (allowThresholdConclusion && comparableRates.some(exceedsThreePercent)) warnings.push(['alert', '依契約第六條第三項，可能符合買方解除契約條件，請進一步核對。']);
         if (!Number.isFinite(data.basic.contractTotalArea)) warnings.push(['', '第四條第一項已提供；請輸入契約記載的房屋總面積。目前總面積計算僅在分項齊全時採分項加總暫估。']);
         if (HOUSE_CATEGORIES.some((category) => !Number.isFinite(data.categories[category].price))) warnings.push(['', '分項價款未齊，不猜測單價；缺少價款的項目只顯示面積差與警示。']);
         if (!Number.isFinite(totals.results.accessory.amount) && Number.isFinite(data.categories.accessory.price)) warnings.push(['', '附屬建物雨遮排除資料未齊或未確認，不猜測雨遮為 0，也不輸出確定的附屬建物價差。']);
@@ -482,16 +560,17 @@ if (typeof document !== 'undefined') {
 
     function render() {
         const data = collectData();
-        const errors = validateInputs(data);
         const compensable = prepareCompensableCategories(data);
         const totals = calculateTotals(data.categories, null, data.basic.contractTotalArea, data.basic.declaredTotalArea, compensable.categories);
+        const validation = validateInputs(data, totals);
+        const isBlocked = validation.blockingErrors.length > 0;
 
         const priceDifference = Number.isFinite(data.basic.totalPrice) && Number.isFinite(data.basic.parkingPrice)
             ? data.basic.totalPrice - data.basic.parkingPrice : null;
         element('price-excluding-parking').textContent = formatTenThousands(priceDifference);
         element('contract-rain-cover-display').value = Number.isFinite(data.basic.rainCoverArea) ? data.basic.rainCoverArea : '';
         element('rain-cover-status').textContent = compensable.message;
-        element('area-error').textContent = errors.join(' ');
+        element('area-error').textContent = validation.blockingErrors.join(' ');
 
         rows.forEach((row) => {
             const category = row.dataset.category;
@@ -508,28 +587,30 @@ if (typeof document !== 'undefined') {
             setOutput(row, 'amount', formatMoney(result.amount, true), result.amount);
         });
 
-        element('main-rate').textContent = formatPercent(totals.results.main.rate);
+        element('main-rate').textContent = isBlocked ? '資料待核對' : formatPercent(totals.results.main.rate);
         element('main-formula').textContent = Number.isFinite(totals.results.main.rate)
             ? `(${formatArea(data.categories.main.actualArea)} − ${formatArea(data.categories.main.contractArea)}) ÷ ${formatArea(data.categories.main.contractArea)}`
             : '（實際 − 契約）÷ 契約';
-        element('total-difference').textContent = formatArea(totals.totalDifference, true);
-        element('total-rate').textContent = formatPercent(totals.totalRate);
+        element('total-difference').textContent = isBlocked ? '資料待核對' : formatArea(totals.totalDifference, true);
+        element('total-rate').textContent = isBlocked ? '資料待核對' : formatPercent(totals.totalRate);
         element('partial-reference-net').textContent = formatMoney(totals.partialReferenceNet, true);
-        element('partial-reference-note').textContent = totals.completedAmountCount > 0
+        element('partial-reference-note').textContent = isBlocked && totals.completedAmountCount > 0
+            ? `部分資料參考值，尚未通過驗證；已計入 ${totals.completedAmountCount} / ${HOUSE_CATEGORIES.length} 個房屋分項`
+            : totals.completedAmountCount > 0
             ? `已計入 ${totals.completedAmountCount} / ${HOUSE_CATEGORIES.length} 個房屋分項；不代表完整淨額`
             : '尚無可計算分項';
-        element('reference-net').textContent = formatMoney(totals.referenceNet, true);
-        element('reference-net-note').textContent = Number.isFinite(totals.referenceNet)
+        element('reference-net').textContent = isBlocked ? '—' : formatMoney(totals.referenceNet, true);
+        element('reference-net-note').textContent = isBlocked ? '資料有阻止性錯誤，完整淨額暫不顯示' : Number.isFinite(totals.referenceNet)
             ? '三個房屋分項齊全；尚未套用契約上限'
             : '三個房屋分項的面積與價款齊全後才顯示';
 
         const capScenario = calculateTwoPercentScenario(compensable.categories, totals.results);
-        const scenarioComplete = Number.isFinite(capScenario.amount) && Number.isFinite(totals.referenceNet);
+        const scenarioComplete = !isBlocked && Number.isFinite(capScenario.amount) && Number.isFinite(totals.referenceNet);
         element('scenario-unadjusted').textContent = scenarioComplete ? formatMoney(totals.referenceNet, true) : '—';
         element('scenario-capped').textContent = scenarioComplete ? formatMoney(capScenario.amount, true) : '—';
         element('cap-scenario-status').textContent = scenarioComplete
             ? '假設試算／請依下方步驟核對'
-            : '資料未齊：先補齊三項面積與價款';
+            : isBlocked ? '資料待核對：暫不顯示情境淨額' : '資料未齊：先補齊三項面積與價款';
         const scenarioBars = element('scenario-bars');
         if (scenarioComplete) {
             const labels = { main: '主建物', accessory: '附屬建物', shared: '共有部分' };
@@ -544,8 +625,8 @@ if (typeof document !== 'undefined') {
             scenarioBars.innerHTML = '<p>請先填妥主建物、附屬建物、共有部分的契約面積、實際面積與分項價款。</p>';
         }
         const builderInquirySection = element('builder-inquiry-section');
-        builderInquirySection.hidden = !totals.actualBreakdownComplete;
-        element('builder-inquiry-text').textContent = totals.actualBreakdownComplete
+        builderInquirySection.hidden = isBlocked || !totals.actualBreakdownComplete;
+        element('builder-inquiry-text').textContent = !isBlocked && totals.actualBreakdownComplete
             ? buildBuilderInquiry(data, totals, capScenario, compensable.categories)
             : '';
         element('builder-inquiry-copy-status').textContent = '';
@@ -607,22 +688,25 @@ if (typeof document !== 'undefined') {
             element('total-consistency').textContent = '需填妥權狀總面積與三項房屋實際面積後核對。';
         }
 
-        const warnings = buildWarnings(data, totals);
+        const warnings = buildWarnings(data, totals, !isBlocked);
+        validation.warnings.forEach((message) => warnings.unshift(['', message]));
+        validation.info.forEach((message) => warnings.push(['success', message]));
+        if (isBlocked) warnings.unshift(['alert', '資料待核對：阻止性錯誤修正前，不顯示完整淨額、2% 情境淨額、建商結算差異，也不判定是否符合解除契約條件。']);
         element('warnings').innerHTML = warnings.map(([type, text]) => `<p class="warning-item${type ? ` warning-item--${type}` : ''}">${text}</p>`).join('');
 
         const hasBasicCalculation = Number.isFinite(totals.results.main.rate) || Number.isFinite(totals.totalRate) || Number.isFinite(totals.partialReferenceNet);
-        const readyForReview = hasBasicCalculation && Number.isFinite(totals.referenceNet);
+        const readyForReview = !isBlocked && hasBasicCalculation && Number.isFinite(totals.referenceNet);
         const status = element('calculation-status');
-        status.className = `status-pill ${readyForReview ? 'status-pill--review' : hasBasicCalculation ? 'status-pill--ready' : 'status-pill--incomplete'}`;
-        status.textContent = readyForReview ? '待核對建商結算' : hasBasicCalculation ? '可初步試算' : '資料未齊';
-        element('status-detail').textContent = readyForReview
+        status.className = `status-pill ${readyForReview ? 'status-pill--review' : !isBlocked && hasBasicCalculation ? 'status-pill--ready' : 'status-pill--incomplete'}`;
+        status.textContent = isBlocked ? '資料待核對' : readyForReview ? '待核對建商結算' : hasBasicCalculation ? '可初步試算' : '資料未齊';
+        element('status-detail').textContent = isBlocked ? '請先修正下方列出的欄位與面積比較範圍。' : readyForReview
             ? '主要計算資料已具備，仍需依完整契約核對 2% 上限及結算方式。'
             : hasBasicCalculation ? '已有部分結果；資料缺口與契約警示請見下方。' : '請先輸入契約與實際登記面積。';
 
         const builderSigned = Number.isFinite(data.basic.builderAmount)
             ? (data.basic.builderDirection === 'refund' ? -data.basic.builderAmount : data.basic.builderAmount)
             : null;
-        element('builder-difference').textContent = Number.isFinite(builderSigned) && Number.isFinite(totals.referenceNet)
+        element('builder-difference').textContent = !isBlocked && Number.isFinite(builderSigned) && Number.isFinite(totals.referenceNet)
             ? formatMoney(builderSigned - totals.referenceNet, true) : '—';
         element('generated-at').textContent = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'long', timeStyle: 'short' }).format(new Date());
     }
@@ -650,6 +734,7 @@ if (typeof document !== 'undefined') {
 
     form.addEventListener('input', (event) => {
         let source = event.target;
+        if (source.id === 'contract-main-ratio') source.dataset.valueSource = 'manual';
         if (source.matches('[data-area-pair]')) source = syncAreaPair(source);
         if (source.matches('[data-category-sync]')) syncCategoryFromClause(source);
         if (source.matches('[data-field="contractArea"]')) syncClauseFromCategory(source);
